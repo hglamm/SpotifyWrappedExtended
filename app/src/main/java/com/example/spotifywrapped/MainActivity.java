@@ -27,7 +27,7 @@ import okhttp3.Response;
 public class MainActivity extends AppCompatActivity {
 
     public static final String CLIENT_ID = "2a364580177045e4b63ce135f14461ca";
-    public static final String REDIRECT_URI = "SpotifyWrappedP2://auth";
+    public static final String REDIRECT_URI = "com.example.spotifywrapped://auth";
 
     public static final int AUTH_TOKEN_REQUEST_CODE = 0;
     public static final int AUTH_CODE_REQUEST_CODE = 1;
@@ -77,6 +77,7 @@ public class MainActivity extends AppCompatActivity {
      */
     public void getToken() {
         final AuthorizationRequest request = getAuthenticationRequest(AuthorizationResponse.Type.TOKEN);
+        System.out.println(request);
         AuthorizationClient.openLoginActivity(MainActivity.this, AUTH_TOKEN_REQUEST_CODE, request);
     }
 
@@ -100,6 +101,11 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         final AuthorizationResponse response = AuthorizationClient.getResponse(resultCode, data);
+
+        System.out.println("Request Code: " + requestCode);
+        System.out.println("Result Code: " + resultCode);
+        System.out.println("data: " + data);
+        System.out.println("Response: " + response);
 
         // Check which request code is present (if any)
         if (AUTH_TOKEN_REQUEST_CODE == requestCode) {

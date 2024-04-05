@@ -18,14 +18,14 @@
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
-                <data android:host="auth" android:scheme="SpotifyWrappedP2"/>
+                <data android:host="auth" android:scheme="com.example.spotifywrapped"/>
             </intent-filter>
             <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
+                <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
                 <!-- Adjust these to match your Redirect URI -->
-                <data android:scheme="SpotifyWrappedP2"
+                <data android:scheme="com.example.spotifywrapped"
                     android:host="auth" />
             </intent-filter>
 
