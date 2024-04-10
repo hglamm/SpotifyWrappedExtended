@@ -73,12 +73,14 @@
             android:id="@+id/PastSummaries"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="8dp"
             android:text="View Past" />
 
         <Button
             android:id="@+id/accSettings"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="8dp"
             android:text="Settings" />
 
     </LinearLayout>

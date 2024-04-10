@@ -34,6 +34,7 @@ public class SettingsActivity extends AppCompatActivity {
         auth = SignOnActivity.getAuth();
         Button logOut = (Button) findViewById(R.id.logOutButt);
         Button dele = (Button) findViewById(R.id.delAcc);
+        Button backBtn = (Button) findViewById(R.id.settings_back_btn);
 
         Bundle bundle = new Bundle();
         Fragment fraggy = new CertaintyFragment();
@@ -61,6 +62,10 @@ public class SettingsActivity extends AppCompatActivity {
         }));
 
 
+        backBtn.setOnClickListener((v) -> {
+            Intent intent = new Intent(SettingsActivity.this, MainActivity.class);
+            startActivity(intent);
+        });
 
 
         logOut.setOnClickListener((v) -> {
