@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
         Button tokenBtn = (Button) findViewById(R.id.token_btn);
         Button codeBtn = (Button) findViewById(R.id.code_btn);
         Button profileBtn = (Button) findViewById(R.id.profile_btn);
-        Button pastSumBtn = (Button) findViewById(R.id.PastSummaries);
+        //Button pastSumBtn = (Button) findViewById(R.id.PastSummaries);
         Button settingBtn = (Button) findViewById(R.id.accSettings);
 
         // Set the click listeners for the buttons
@@ -79,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-        pastSumBtn.setOnClickListener((v) -> {
+        /*pastSumBtn.setOnClickListener((v) -> {
                     Intent i = new Intent(MainActivity.this, PastSummariesActivity.class);
                     if (mAccessToken != null) {
                         i.putExtra("token", mAccessToken);
@@ -87,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
                     } else {
                         Toast.makeText(MainActivity.this, "You should have a token", Toast.LENGTH_SHORT).show();
                     }
-        });
+        });*/
 
 
     }
