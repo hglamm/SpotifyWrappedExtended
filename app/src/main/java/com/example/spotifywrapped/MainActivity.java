@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.content.Intent;
 import android.net.Uri;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -28,18 +29,17 @@ import okhttp3.Response;
 public class MainActivity extends AppCompatActivity {
 
     private static FirebaseAuth fireAu = SignOnActivity.getAuth();
-    private static final String CLIENT_ID = "2a364580177045e4b63ce135f14461ca";
-     static final String REDIRECT_URI = "com.example.spotifywrapped://auth";
 
     public static final int AUTH_TOKEN_REQUEST_CODE = 0;
     public static final int AUTH_CODE_REQUEST_CODE = 1;
 
     private final OkHttpClient mOkHttpClient = new OkHttpClient();
-    private String mAccessToken, mAccessCode;
+    public String mAccessToken, mAccessCode;
     private Call mCall;
     private String accEmail;//.getStringExtra("val");
+    private Button loginBtn;
 
-    private TextView tokenTextView, codeTextView, profileTextView;
+    private TextView welcomeTextView, codeTextView, profileTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         accEmail = getIntent().getStringExtra("val");
         // Initialize the views
-        tokenTextView = (TextView) findViewById(R.id.token_text_view);
+        welcomeTextView = (TextView) findViewById(R.id.welcome_text_view);
         codeTextView = (TextView) findViewById(R.id.code_text_view);
         profileTextView = (TextView) findViewById(R.id.response_text_view);
 
@@ -57,10 +57,31 @@ public class MainActivity extends AppCompatActivity {
         Button tokenBtn = (Button) findViewById(R.id.token_btn);
         Button codeBtn = (Button) findViewById(R.id.code_btn);
         Button profileBtn = (Button) findViewById(R.id.profile_btn);
-        //Button pastSumBtn = (Button) findViewById(R.id.PastSummaries);
+        loginBtn = (Button) findViewById(R.id.login_btn);
         Button settingBtn = (Button) findViewById(R.id.accSettings);
+        Button wrappedBtn = (Button) findViewById(R.id.wrapped_btn);
+
+        if (mAccessToken != null) {
+            loginBtn.setVisibility(View.INVISIBLE);
+        }
 
         // Set the click listeners for the buttons
+
+        wrappedBtn.setOnClickListener((v) -> {
+            if (mAccessToken == null) {
+                Toast.makeText(MainActivity.this, "You must log into Spotify first.", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            Intent intent = new Intent(MainActivity.this, WrappedSongs.class);
+            Bundle bundle = new Bundle();
+            bundle.putString("token", mAccessToken);
+            intent.putExtras(bundle);
+            startActivity(intent);
+        });
+
+        loginBtn.setOnClickListener((v) -> {
+            getToken();
+        });
 
         tokenBtn.setOnClickListener((v) -> {
             getToken();
@@ -73,6 +94,7 @@ public class MainActivity extends AppCompatActivity {
         profileBtn.setOnClickListener((v) -> {
             onGetUserProfileClicked();
         });
+
         settingBtn.setOnClickListener((v) -> {
             Intent thing = new Intent(MainActivity.this, SettingsActivity.class);
             startActivity(thing);
@@ -100,8 +122,7 @@ public class MainActivity extends AppCompatActivity {
      * https://developer.spotify.com/documentation/general/guides/authorization-guide/
      */
     public void getToken() {
-        final AuthorizationRequest request = getAuthenticationRequest(AuthorizationResponse.Type.TOKEN);
-        System.out.println(request);
+        final AuthorizationRequest request = APIInteraction.getAuthenticationRequest(AuthorizationResponse.Type.TOKEN);
         AuthorizationClient.openLoginActivity(MainActivity.this, AUTH_TOKEN_REQUEST_CODE, request);
 
     }
@@ -113,34 +134,8 @@ public class MainActivity extends AppCompatActivity {
      * https://developer.spotify.com/documentation/general/guides/authorization-guide/
      */
     public void getCode() {
-        final AuthorizationRequest request = getAuthenticationRequest(AuthorizationResponse.Type.CODE);
+        final AuthorizationRequest request = APIInteraction.getAuthenticationRequest(AuthorizationResponse.Type.CODE);
         AuthorizationClient.openLoginActivity(MainActivity.this, AUTH_CODE_REQUEST_CODE, request);
-    }
-
-
-    /**
-     * When the app leaves this activity to momentarily get a token/code, this function
-     * fetches the result of that external activity to get the response from Spotify
-     */
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        final AuthorizationResponse response = AuthorizationClient.getResponse(resultCode, data);
-
-        System.out.println("Request Code: " + requestCode);
-        System.out.println("Result Code: " + resultCode);
-        System.out.println("data: " + data);
-        System.out.println("Response: " + response);
-
-        // Check which request code is present (if any)
-        if (AUTH_TOKEN_REQUEST_CODE == requestCode) {
-            mAccessToken = response.getAccessToken();
-            setTextAsync(mAccessToken, tokenTextView);
-
-        } else if (AUTH_CODE_REQUEST_CODE == requestCode) {
-            mAccessCode = response.getCode();
-            setTextAsync(mAccessCode, codeTextView);
-        }
     }
 
     /**
@@ -185,49 +180,35 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    /**
-     * Creates a UI thread to update a TextView in the background
-     * Reduces UI latency and makes the system perform more consistently
-     *
-     * @param text the text to set
-     * @param textView TextView object to update
-     */
-    private void setTextAsync(final String text, TextView textView) {
+    public void setTextAsync(final String text, TextView textView) {
         runOnUiThread(() -> textView.setText(text));
     }
 
-    /**
-     * Get authentication request
-     *
-     * @param type the type of the request
-     * @return the authentication request
-     */
-    private AuthorizationRequest getAuthenticationRequest(AuthorizationResponse.Type type) {
-        return new AuthorizationRequest.Builder(CLIENT_ID, type, getRedirectUri().toString())
-                .setShowDialog(false)
-                .setScopes(new String[] { "user-read-email", "user-read-private", "user-top-read"}) // <--- Change the scope of your requested token here
-                .setCampaign("your-campaign-token")
-                .build();
-    }
-
-    /**
-     * Gets the redirect Uri for Spotify
-     *
-     * @return redirect Uri object
-     */
-    private Uri getRedirectUri() {
-        return Uri.parse(REDIRECT_URI);
-    }
-
-    private void cancelCall() {
+    public void cancelCall() {
         if (mCall != null) {
             mCall.cancel();
         }
     }
 
     @Override
-    protected void onDestroy() {
-        cancelCall();
-        super.onDestroy();
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        final AuthorizationResponse response = AuthorizationClient.getResponse(resultCode, data);
+
+        System.out.println("Request Code: " + requestCode);
+        System.out.println("Result Code: " + resultCode);
+        System.out.println("data: " + data);
+        System.out.println("Response: " + response);
+
+        // Check which request code is present (if any)
+        if (AUTH_TOKEN_REQUEST_CODE == requestCode) {
+            mAccessToken = response.getAccessToken();
+            loginBtn.setVisibility(View.INVISIBLE);
+            welcomeTextView.setVisibility(View.VISIBLE);
+
+        } else if (AUTH_CODE_REQUEST_CODE == requestCode) {
+            mAccessCode = response.getCode();
+        }
     }
+
 }

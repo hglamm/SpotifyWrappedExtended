@@ -14,12 +14,31 @@
         tools:layout_editor_absoluteX="35dp"
         tools:layout_editor_absoluteY="-84dp">
 
-        <TextView
-            android:id="@+id/token_text_view"
+        <Button
+            android:id="@+id/login_btn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
-            tools:text="Token:" />
+            android:text="Login to Spotify"
+            android:visibility="visible" />
+
+        <TextView
+            android:id="@+id/welcome_text_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:text="Welcome"
+            android:visibility="invisible"
+            android:layout_gravity="center"
+            />
+
+        <Button
+            android:id="@+id/wrapped_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:text="View Current Wrapped"
+            />
 
         <Button
             android:id="@+id/token_btn"

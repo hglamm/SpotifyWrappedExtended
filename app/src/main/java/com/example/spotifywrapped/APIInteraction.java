@@ -18,11 +18,7 @@ public class APIInteraction extends AppCompatActivity {
     private static final String CLIENT_ID = "2a364580177045e4b63ce135f14461ca";
     static final String REDIRECT_URI = "com.example.spotifywrapped://auth";
 
-    public static final int AUTH_TOKEN_REQUEST_CODE = 0;
-    public static final int AUTH_CODE_REQUEST_CODE = 1;
-
     public final OkHttpClient mOkHttpClient = new OkHttpClient();
-    public String mAccessToken, mAccessCode;
     public Call mCall;
 
     /**
@@ -71,26 +67,5 @@ public class APIInteraction extends AppCompatActivity {
         super.onDestroy();
     }
 
-    /**
-     * When the app leaves this activity to momentarily get a token/code, this function
-     * fetches the result of that external activity to get the response from Spotify
-     */
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        final AuthorizationResponse response = AuthorizationClient.getResponse(resultCode, data);
 
-        System.out.println("Request Code: " + requestCode);
-        System.out.println("Result Code: " + resultCode);
-        System.out.println("data: " + data);
-        System.out.println("Response: " + response);
-
-        // Check which request code is present (if any)
-        if (AUTH_TOKEN_REQUEST_CODE == requestCode) {
-            mAccessToken = response.getAccessToken();
-
-        } else if (AUTH_CODE_REQUEST_CODE == requestCode) {
-            mAccessCode = response.getCode();
-        }
-    }
 }
