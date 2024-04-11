@@ -9,11 +9,11 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.spotify.sdk.android.auth.AuthorizationClient;
 import com.spotify.sdk.android.auth.AuthorizationRequest;
 import com.spotify.sdk.android.auth.AuthorizationResponse;
 
-import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -27,8 +27,9 @@ import okhttp3.Response;
 
 public class MainActivity extends AppCompatActivity {
 
-    public static final String CLIENT_ID = "2a364580177045e4b63ce135f14461ca";
-    public static final String REDIRECT_URI = "com.example.spotifywrapped://auth";
+    private static FirebaseAuth fireAu = SignOnActivity.getAuth();
+    private static final String CLIENT_ID = "2a364580177045e4b63ce135f14461ca";
+     static final String REDIRECT_URI = "com.example.spotifywrapped://auth";
 
     public static final int AUTH_TOKEN_REQUEST_CODE = 0;
     public static final int AUTH_CODE_REQUEST_CODE = 1;
@@ -36,22 +37,28 @@ public class MainActivity extends AppCompatActivity {
     private final OkHttpClient mOkHttpClient = new OkHttpClient();
     private String mAccessToken, mAccessCode;
     private Call mCall;
+    private String accEmail;//.getStringExtra("val");
 
     private TextView tokenTextView, codeTextView, profileTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
+        accEmail = getIntent().getStringExtra("val");
         // Initialize the views
         tokenTextView = (TextView) findViewById(R.id.token_text_view);
         codeTextView = (TextView) findViewById(R.id.code_text_view);
         profileTextView = (TextView) findViewById(R.id.response_text_view);
 
+
         // Initialize the buttons
         Button tokenBtn = (Button) findViewById(R.id.token_btn);
         Button codeBtn = (Button) findViewById(R.id.code_btn);
         Button profileBtn = (Button) findViewById(R.id.profile_btn);
+        //Button pastSumBtn = (Button) findViewById(R.id.PastSummaries);
+        Button settingBtn = (Button) findViewById(R.id.accSettings);
 
         // Set the click listeners for the buttons
 
@@ -66,6 +73,22 @@ public class MainActivity extends AppCompatActivity {
         profileBtn.setOnClickListener((v) -> {
             onGetUserProfileClicked();
         });
+        settingBtn.setOnClickListener((v) -> {
+            Intent thing = new Intent(MainActivity.this, SettingsActivity.class);
+            startActivity(thing);
+        });
+
+
+        /*pastSumBtn.setOnClickListener((v) -> {
+                    Intent i = new Intent(MainActivity.this, PastSummariesActivity.class);
+                    if (mAccessToken != null) {
+                        i.putExtra("token", mAccessToken);
+                        startActivity(i);
+                    } else {
+                        Toast.makeText(MainActivity.this, "You should have a token", Toast.LENGTH_SHORT).show();
+                    }
+        });*/
+
 
     }
 
@@ -80,8 +103,8 @@ public class MainActivity extends AppCompatActivity {
         final AuthorizationRequest request = getAuthenticationRequest(AuthorizationResponse.Type.TOKEN);
         System.out.println(request);
         AuthorizationClient.openLoginActivity(MainActivity.this, AUTH_TOKEN_REQUEST_CODE, request);
-    }
 
+    }
 
     /**
      * Get code from Spotify
@@ -141,18 +164,18 @@ public class MainActivity extends AppCompatActivity {
 
         mCall.enqueue(new Callback() {
             @Override
-            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+            public void onFailure(Call call, IOException e) {
                 Log.d("HTTP", "Failed to fetch data: " + e);
                 Toast.makeText(MainActivity.this, "Failed to fetch data, watch Logcat for more details",
                         Toast.LENGTH_SHORT).show();
             }
 
             @Override
-            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+            public void onResponse(Call call, Response response) throws IOException {
                 try {
-                    assert response.body() != null;
                     final JSONObject jsonObject = new JSONObject(response.body().string());
                     setTextAsync(jsonObject.toString(3), profileTextView);
+
                 } catch (JSONException e) {
                     Log.d("JSON", "Failed to parse data: " + e);
                     Toast.makeText(MainActivity.this, "Failed to parse data, watch Logcat for more details",
@@ -182,7 +205,7 @@ public class MainActivity extends AppCompatActivity {
     private AuthorizationRequest getAuthenticationRequest(AuthorizationResponse.Type type) {
         return new AuthorizationRequest.Builder(CLIENT_ID, type, getRedirectUri().toString())
                 .setShowDialog(false)
-                .setScopes(new String[] { "user-read-email" }) // <--- Change the scope of your requested token here
+                .setScopes(new String[] { "user-read-email", "user-read-private", "user-top-read"}) // <--- Change the scope of your requested token here
                 .setCampaign("your-campaign-token")
                 .build();
     }

@@ -10,7 +10,9 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        tools:layout_editor_absoluteX="35dp"
+        tools:layout_editor_absoluteY="-84dp">
 
         <TextView
             android:id="@+id/token_text_view"
@@ -60,6 +62,27 @@
                 android:layout_weight="1"
                 android:text="Get User Profile" />
         </LinearLayout>
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="match_parent"
+            android:layout_height="38dp"
+            android:text="TextView" />
+
+        <Button
+            android:id="@+id/PastSummaries"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:text="View Past" />
+
+        <Button
+            android:id="@+id/accSettings"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:text="Settings" />
+
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
