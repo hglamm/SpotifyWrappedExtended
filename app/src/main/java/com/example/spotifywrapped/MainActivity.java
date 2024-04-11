@@ -45,11 +45,13 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Bundle bundle1 = getIntent().getExtras();
+
         if (bundle1 != null) {
             mAccessToken = bundle1.getString("token");
+            String[] topSongs = bundle1.getStringArray("topSongs");
             // TODO - save wrapped info in bundle to database here
-        }
 
+        }
 
         setContentView(R.layout.activity_main);
         accEmail = getIntent().getStringExtra("val");

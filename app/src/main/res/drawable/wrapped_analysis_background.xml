@@ -1,16 +1,13 @@
-<?xml version="1.0" encoding="utf-8"?>
-<vector xmlns:android="http://schemas.android.com/apk/res/android"
-    android:width="1440dp"
-    android:height="320dp"
-    android:viewportWidth="720"
-    android:viewportHeight="320" >
-    <path
-        android:pathData="M 0,50
-                  C 50,0 150,100 200,50
-                  S 350,0 400,50
-                  L 400,0
-                  L 0,0
-                  Z"
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Gradient Background -->
+    <item>
+        <shape android:shape="rectangle">
+            <gradient
+                android:startColor="#950095"
+                android:centerColor="#535300"
+                android:endColor="#009797"
+                android:angle="45"/>
+        </shape>
+    </item>
 
-        android:fillColor="#ff8d90" />
-</vector>
+</layer-list>
