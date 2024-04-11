@@ -1,9 +1,11 @@
 package com.example.spotifywrapped;
 
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -13,8 +15,8 @@ public class WrappedLoudness extends AppCompatActivity {
 
     private TextView loudnessTextView;
     double avgLoudness = 0.0;
-
-
+    private MediaPlayer mediaPlayer;
+    private String[] previewURLS;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -22,6 +24,7 @@ public class WrappedLoudness extends AppCompatActivity {
 
         Bundle bundle = getIntent().getExtras();
         avgLoudness = bundle.getDouble("avgLoudness");
+        previewURLS = bundle.getStringArray("previewURLs");
 
         loudnessTextView = (TextView) findViewById(R.id.wrapped_loudness_text);
 
@@ -36,10 +39,25 @@ public class WrappedLoudness extends AppCompatActivity {
             public void onFinish() {
                 Intent intent = new Intent(WrappedLoudness.this, WrappedDanceability.class);
                 intent.putExtras(bundle);
+                mediaPlayer.stop();
                 startActivity(intent);
             }
         };
         timer.start();
+        mediaPlayer = new MediaPlayer();
+        try {
+            mediaPlayer.setDataSource(previewURLS[4]);
+            mediaPlayer.prepareAsync();
+            mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                @Override
+                public void onPrepared(MediaPlayer mp) {
+                    // Start playback
+                    mediaPlayer.start();
+                }
+            });
+        } catch (Exception e) {
+            Toast.makeText(WrappedLoudness.this, "Failed to load media", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void showWrappedLoudness() {

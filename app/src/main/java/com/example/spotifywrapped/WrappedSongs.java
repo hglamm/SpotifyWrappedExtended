@@ -1,12 +1,14 @@
 package com.example.spotifywrapped;
 
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.Toolbar;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -38,6 +40,8 @@ public class WrappedSongs extends AppCompatActivity {
     private TextView songTextView;
     private Call mCall;
     private String[] topSongsFinal;
+    private String[] previewURLS;
+    private MediaPlayer mediaPlayer;
 
 
     @Override
@@ -69,7 +73,9 @@ public class WrappedSongs extends AppCompatActivity {
                 Bundle bundle = new Bundle();
                 bundle.putString("token", mAccessToken);
                 bundle.putStringArray("topSongs", topSongsFinal);
+                bundle.putStringArray("previewURLs", previewURLS);
                 intent.putExtras(bundle);
+                mediaPlayer.stop();
                 startActivity(intent);
             }
         };
@@ -103,16 +109,34 @@ public class WrappedSongs extends AppCompatActivity {
                     String names = "";
 
                     topSongsFinal = new String[topSongsLength];
+                    previewURLS = new String[topSongsLength];
 
                     for (int i = 0; i < topSongsLength; i++) {
                         String name = ((JSONObject) (topSongs.get(i))).getString("name");
+                        String previewURL = ((JSONObject) (topSongs.get(i))).getString("preview_url");
                         names = names.concat((i+1) + ". " + name + "\n\n");
                         topSongsFinal[i] = name;
+                        previewURLS[i] = previewURL;
                     }
 
                     names = "YOUR TOP SONGS: \n\n\n" + names;
 
                     setTextAsync(names, songTextView);
+
+                    mediaPlayer = new MediaPlayer();
+                    try {
+                        mediaPlayer.setDataSource(previewURLS[0]);
+                        mediaPlayer.prepareAsync();
+                        mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                            @Override
+                            public void onPrepared(MediaPlayer mp) {
+                                // Start playback
+                                mediaPlayer.start();
+                            }
+                        });
+                    } catch (Exception e) {
+                        Toast.makeText(WrappedSongs.this, "Failed to load media", Toast.LENGTH_SHORT).show();
+                    }
 
                 } catch (JSONException e) {
                     Log.d("JSON", "Failed to parse data: " + e);
@@ -143,6 +167,16 @@ public class WrappedSongs extends AppCompatActivity {
 
     public void setTextAsync(final String text, TextView textView) {
         runOnUiThread(() -> textView.setText(text));
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // Release the MediaPlayer when the activity is destroyed
+        if (mediaPlayer != null) {
+            mediaPlayer.release();
+            mediaPlayer = null;
+        }
     }
 
 }
