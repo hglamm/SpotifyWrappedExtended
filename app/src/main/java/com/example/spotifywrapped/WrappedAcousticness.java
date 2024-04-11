@@ -32,7 +32,6 @@ public class WrappedAcousticness extends AppCompatActivity {
     private final OkHttpClient mOkHttpClient = new OkHttpClient();
 
     public static final int AUTH_TOKEN_REQUEST_CODE = 0;
-    public static final int AUTH_CODE_REQUEST_CODE = 1;
 
     private TextView analysisTextView;
     private Call mCall;
@@ -42,7 +41,6 @@ public class WrappedAcousticness extends AppCompatActivity {
     private double avgDanceability = 0.0;
     private double avgEnergy = 0.0;
     double avgInstrumentalness = 0.0;
-    private double avgLiveness = 0.0;
     double avgLoudness = 0.0;
     private double avgMode = 0.0;
 
@@ -79,7 +77,6 @@ public class WrappedAcousticness extends AppCompatActivity {
                 bundle.putDouble("avgDanceability", avgDanceability);
                 bundle.putDouble("avgInstrumentalness", avgInstrumentalness);
                 bundle.putDouble("avgLoudness", avgLoudness);
-                bundle.putDouble("avgLiveness", avgLiveness);
                 bundle.putDouble("avgMode", avgMode);
                 intent.putExtras(bundle);
                 startActivity(intent);
@@ -162,7 +159,6 @@ public class WrappedAcousticness extends AppCompatActivity {
                         avgDanceability += Double.parseDouble(((JSONObject) (topSongsAudioFeatures.get(i))).getString("danceability"));
                         avgEnergy += Double.parseDouble(((JSONObject) (topSongsAudioFeatures.get(i))).getString("energy"));
                         avgInstrumentalness += Double.parseDouble(((JSONObject) (topSongsAudioFeatures.get(i))).getString("instrumentalness"));
-                        avgLiveness += Double.parseDouble(((JSONObject) (topSongsAudioFeatures.get(i))).getString("liveness"));
                         avgLoudness += Double.parseDouble(((JSONObject) (topSongsAudioFeatures.get(i))).getString("loudness"));
                         avgMode += Double.parseDouble(((JSONObject) (topSongsAudioFeatures.get(i))).getString("mode"));
                     }
@@ -172,7 +168,6 @@ public class WrappedAcousticness extends AppCompatActivity {
                     avgDanceability /= topSongsAudioFeatures.length();
                     avgEnergy /= topSongsAudioFeatures.length();
                     avgInstrumentalness /= topSongsAudioFeatures.length();
-                    avgLiveness /= topSongsAudioFeatures.length();
                     avgLoudness /= topSongsAudioFeatures.length();
                     avgMode /= topSongsAudioFeatures.length();
 

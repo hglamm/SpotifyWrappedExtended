@@ -29,10 +29,8 @@ public class WrappedArtists extends AppCompatActivity {
 
     private String mAccessToken;
     private final OkHttpClient mOkHttpClient = new OkHttpClient();
-
     public static final int AUTH_TOKEN_REQUEST_CODE = 0;
     public static final int AUTH_CODE_REQUEST_CODE = 1;
-
     private TextView artistTextView;
     private Call mCall;
     private String[] topArtistsFinal;
