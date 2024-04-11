@@ -44,6 +44,11 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Bundle bundle1 = getIntent().getExtras();
+        if (bundle1 != null) {
+            mAccessToken = bundle1.getString("token");
+        }
+
 
         setContentView(R.layout.activity_main);
         accEmail = getIntent().getStringExtra("val");
@@ -63,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
 
         if (mAccessToken != null) {
             loginBtn.setVisibility(View.INVISIBLE);
+            welcomeTextView.setVisibility(View.VISIBLE);
         }
 
         // Set the click listeners for the buttons

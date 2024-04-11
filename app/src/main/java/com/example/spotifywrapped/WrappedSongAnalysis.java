@@ -18,6 +18,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.Call;
@@ -166,6 +167,8 @@ public class WrappedSongAnalysis extends AppCompatActivity {
                         avgLoudness += Double.parseDouble(((JSONObject) (topSongsAudioFeatures.get(i))).getString("loudness"));
                         avgMode += Double.parseDouble(((JSONObject) (topSongsAudioFeatures.get(i))).getString("mode"));
                     }
+
+                    DecimalFormat f = new DecimalFormat("##.00");
                     avgAcousticness /= topSongsAudioFeatures.length();
                     avgDanceability /= topSongsAudioFeatures.length();
                     avgEnergy /= topSongsAudioFeatures.length();
@@ -174,13 +177,13 @@ public class WrappedSongAnalysis extends AppCompatActivity {
                     avgLoudness /= topSongsAudioFeatures.length();
                     avgMode /= topSongsAudioFeatures.length();
 
-                    String displayText = "Acousticness: " + avgAcousticness + "\n"
-                            + "Danceability: " + avgDanceability + "\n"
-                            + "Energy: " + avgEnergy + "\n"
-                            + "Instrumentalness: " + avgInstrumentalness + "\n"
-                            + "Liveness: " + avgLiveness + "\n"
-                            + "Loudness: " + avgLoudness + "\n"
-                            + "Mode: " + avgMode;
+                    String displayText = "Acousticness: " + f.format(avgAcousticness) + "\n\n"
+                            + "Danceability: " + f.format(avgDanceability) + "\n\n"
+                            + "Energy: " + f.format(avgEnergy) + "\n\n"
+                            + "Instrumentalness: " + f.format(avgInstrumentalness) + "\n\n"
+                            + "Liveness: " + f.format(avgLiveness) + "\n\n"
+                            + "Loudness: " + f.format(avgLoudness) + "\n\n"
+                            + "Mode: " + f.format(avgMode);
 
                     setTextAsync(displayText, analysisTextView);
 

@@ -1,4 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
-<selector xmlns:android="http://schemas.android.com/apk/res/android">
-  
-</selector>
+<!-- res/drawable/psychedelic_shapes.xml -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Background Gradient -->
+    <item>
+        <shape android:shape="rectangle">
+            <gradient
+                android:startColor="#FF00FF"
+                android:endColor="#00D5D5"
+                android:angle="45"/>
+        </shape>
+    </item>
+
+    <!-- Colorful Circles -->
+    <item
+        android:left="50dp"
+        android:top="50dp"
+        android:right="50dp"
+        android:bottom="50dp">
+        <shape android:shape="oval">
+            <solid android:color="#CCCC04"/>
+        </shape>
+    </item>
+    <item
+        android:left="100dp"
+        android:top="100dp"
+        android:right="100dp"
+        android:bottom="100dp">
+        <shape android:shape="oval">
+            <solid android:color="#B304B3"/>
+        </shape>
+    </item>
+
+    <!-- Irregular Shapes -->
+    <item
+        android:top="200dp"
+        android:bottom="200dp"
+        android:right="200dp">
+        <rotate
+            android:fromDegrees="45">
+            <shape android:shape="rectangle">
+                <gradient
+                    android:startColor="#00CD00"
+                    android:endColor="#9E9E00"
+                    android:angle="135"/>
+            </shape>
+        </rotate>
+    </item>
+</layer-list>
+
