@@ -1,0 +1,66 @@
+<!-- res/drawable/pink_shapes.xml -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Background Gradient -->
+    <item>
+        <shape android:shape="rectangle">
+            <gradient
+                android:startColor="#FC1B67"
+                android:endColor="#FF80AB"
+                android:angle="45"/>
+        </shape>
+    </item>
+
+    <!-- Circles -->
+    <item
+        android:top="50dp"
+        android:left="50dp">
+        <shape android:shape="oval">
+            <solid android:color="#A30138"/>
+        </shape>
+    </item>
+    <item
+        android:right="50dp"
+        android:bottom="50dp">
+        <shape android:shape="oval">
+            <solid android:color="#61132E"/>
+        </shape>
+    </item>
+
+    <!-- Rectangles -->
+    <item
+        android:left="100dp"
+        android:top="100dp"
+        android:right="200dp">
+        <shape android:shape="rectangle">
+            <solid android:color="#FF4081"/>
+        </shape>
+    </item>
+    <item
+        android:left="150dp"
+        android:top="150dp"
+        android:right="250dp">
+        <shape android:shape="rectangle">
+            <solid android:color="#831138"/>
+        </shape>
+    </item>
+
+    <!-- Lines -->
+    <item
+        android:left="50dp"
+        android:top="200dp">
+        <shape android:shape="line">
+            <stroke
+                android:width="4dp"
+                android:color="#FFFFFF"/>
+        </shape>
+    </item>
+    <item
+        android:left="200dp"
+        android:top="250dp">
+        <shape android:shape="line">
+            <stroke
+                android:width="4dp"
+                android:color="#FFFFFF"/>
+        </shape>
+    </item>
+</layer-list>

@@ -33,9 +33,16 @@
         </activity>
         <activity android:name=".MainActivity" />
         <activity android:name=".CreateAccountActivity"/>
-        <activity android:name=".PastSummariesActivity"/>
         <activity android:name=".SettingsActivity"/>
-
+        <activity android:name=".WrappedSongs" />
+        <activity android:name=".WrappedArtists" />
+        <activity android:name=".WrappedAcousticness" />
+        <activity android:name=".WrappedEnergy" />
+        <activity android:name=".WrappedLoudness" />
+        <activity android:name=".WrappedDanceability" />
+        <activity android:name=".WrappedInstrumentalness" />
+        <activity android:name=".WrappedMode" />
+        <activity android:name=".WrappedSummary" />
 
     </application>
 
