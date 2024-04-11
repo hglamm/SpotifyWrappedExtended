@@ -35,6 +35,7 @@ public class WrappedArtists extends AppCompatActivity {
 
     private TextView artistTextView;
     private Call mCall;
+    private String[] topArtistsFinal;
 
 
     @Override
@@ -62,9 +63,9 @@ public class WrappedArtists extends AppCompatActivity {
 
             @Override
             public void onFinish() {
-                Intent intent = new Intent(WrappedArtists.this, WrappedSongAnalysis.class);
-                Bundle bundle = new Bundle();
+                Intent intent = new Intent(WrappedArtists.this, WrappedAcousticness.class);
                 bundle.putString("token", mAccessToken);
+                bundle.putStringArray("topArtists", topArtistsFinal);
                 intent.putExtras(bundle);
                 startActivity(intent);
             }
@@ -98,9 +99,12 @@ public class WrappedArtists extends AppCompatActivity {
                     int topArtistsLength = Math.min(topArtists.length(), 5);
                     String names = "";
 
+                    topArtistsFinal = new String[topArtistsLength];
+
                     for (int i = 0; i < topArtistsLength; i++) {
                         String name = ((JSONObject) (topArtists.get(i))).getString("name");
                         names = names.concat((i+1) + ". " + name + "\n");
+                        topArtistsFinal[i] = name;
                     }
 
                     names = "TOP ARTISTS: \n\n" + names;

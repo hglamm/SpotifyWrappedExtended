@@ -36,7 +36,13 @@
         <activity android:name=".SettingsActivity"/>
         <activity android:name=".WrappedSongs" />
         <activity android:name=".WrappedArtists" />
-        <activity android:name=".WrappedSongAnalysis" />
+        <activity android:name=".WrappedAcousticness" />
+        <activity android:name=".WrappedEnergy" />
+        <activity android:name=".WrappedLoudness" />
+        <activity android:name=".WrappedDanceability" />
+        <activity android:name=".WrappedInstrumentalness" />
+        <activity android:name=".WrappedMode" />
+        <activity android:name=".WrappedSummary" />
 
     </application>
 

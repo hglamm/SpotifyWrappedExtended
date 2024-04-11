@@ -27,7 +27,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
-public class WrappedSongAnalysis extends AppCompatActivity {
+public class WrappedAcousticness extends AppCompatActivity {
     private String mAccessToken;
     private final OkHttpClient mOkHttpClient = new OkHttpClient();
 
@@ -38,11 +38,19 @@ public class WrappedSongAnalysis extends AppCompatActivity {
     private Call mCall;
     private String ids;
 
+    private double avgAcousticness = 0.0;
+    private double avgDanceability = 0.0;
+    private double avgEnergy = 0.0;
+    double avgInstrumentalness = 0.0;
+    private double avgLiveness = 0.0;
+    double avgLoudness = 0.0;
+    private double avgMode = 0.0;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.wrapped_song_analysis);
+        setContentView(R.layout.wrapped_acousticness);
 
         Bundle bundle = getIntent().getExtras();
         mAccessToken = bundle.getString("token");
@@ -51,7 +59,7 @@ public class WrappedSongAnalysis extends AppCompatActivity {
 
         if (mAccessToken == null) {
             final AuthorizationRequest request = APIInteraction.getAuthenticationRequest(AuthorizationResponse.Type.TOKEN);
-            AuthorizationClient.openLoginActivity(WrappedSongAnalysis.this, 3, request);
+            AuthorizationClient.openLoginActivity(WrappedAcousticness.this, 3, request);
         }
 
         showWrappedAnalysis();
@@ -65,9 +73,14 @@ public class WrappedSongAnalysis extends AppCompatActivity {
 
             @Override
             public void onFinish() {
-                Intent intent = new Intent(WrappedSongAnalysis.this, MainActivity.class);
-                Bundle bundle = new Bundle();
+                Intent intent = new Intent(WrappedAcousticness.this, WrappedEnergy.class);
                 bundle.putString("token", mAccessToken);
+                bundle.putDouble("avgEnergy", avgEnergy);
+                bundle.putDouble("avgDanceability", avgDanceability);
+                bundle.putDouble("avgInstrumentalness", avgInstrumentalness);
+                bundle.putDouble("avgLoudness", avgLoudness);
+                bundle.putDouble("avgLiveness", avgLiveness);
+                bundle.putDouble("avgMode", avgMode);
                 intent.putExtras(bundle);
                 startActivity(intent);
             }
@@ -88,7 +101,7 @@ public class WrappedSongAnalysis extends AppCompatActivity {
             @Override
             public void onFailure(Call call, IOException e) {
                 Log.d("HTTP", "Failed to fetch data: " + e);
-                Toast.makeText(WrappedSongAnalysis.this, "Failed to fetch data, watch Logcat for more details",
+                Toast.makeText(WrappedAcousticness.this, "Failed to fetch data, watch Logcat for more details",
                         Toast.LENGTH_SHORT).show();
             }
 
@@ -107,14 +120,10 @@ public class WrappedSongAnalysis extends AppCompatActivity {
                             ids1 = ids1.concat("," + id);
                         }
                     }
-
-                    System.out.println("IDS FOUND HERE: " + ids1);
                     ids = ids1;
-
-
                 } catch (JSONException e) {
                     Log.d("JSON", "Failed to parse data: " + e);
-                    Toast.makeText(WrappedSongAnalysis.this, "Failed to parse data, watch Logcat for more details",
+                    Toast.makeText(WrappedAcousticness.this, "Failed to parse data, watch Logcat for more details",
                             Toast.LENGTH_SHORT).show();
                 }
             }
@@ -138,7 +147,7 @@ public class WrappedSongAnalysis extends AppCompatActivity {
             @Override
             public void onFailure(Call call, IOException e) {
                 Log.d("HTTP", "Failed to fetch data: " + e);
-                Toast.makeText(WrappedSongAnalysis.this, "Failed to fetch data, watch Logcat for more details",
+                Toast.makeText(WrappedAcousticness.this, "Failed to fetch data, watch Logcat for more details",
                         Toast.LENGTH_SHORT).show();
             }
 
@@ -147,16 +156,6 @@ public class WrappedSongAnalysis extends AppCompatActivity {
                 try {
                     final JSONObject jsonObject = new JSONObject(response.body().string());
                     JSONArray topSongsAudioFeatures = jsonObject.getJSONArray("audio_features");
-
-                    System.out.println("TOP SONGS AUDIO FEATURES: " + topSongsAudioFeatures);
-
-                    double avgAcousticness = 0.0;
-                    double avgDanceability = 0.0;
-                    double avgEnergy = 0.0;
-                    double avgInstrumentalness = 0.0;
-                    double avgLiveness = 0.0;
-                    double avgLoudness = 0.0;
-                    double avgMode = 0.0;
 
                     for (int i = 0; i < topSongsAudioFeatures.length(); i++) {
                         avgAcousticness += Double.parseDouble(((JSONObject) (topSongsAudioFeatures.get(i))).getString("acousticness"));
@@ -177,19 +176,13 @@ public class WrappedSongAnalysis extends AppCompatActivity {
                     avgLoudness /= topSongsAudioFeatures.length();
                     avgMode /= topSongsAudioFeatures.length();
 
-                    String displayText = "Acousticness: " + f.format(avgAcousticness) + "\n\n"
-                            + "Danceability: " + f.format(avgDanceability) + "\n\n"
-                            + "Energy: " + f.format(avgEnergy) + "\n\n"
-                            + "Instrumentalness: " + f.format(avgInstrumentalness) + "\n\n"
-                            + "Liveness: " + f.format(avgLiveness) + "\n\n"
-                            + "Loudness: " + f.format(avgLoudness) + "\n\n"
-                            + "Mode: " + f.format(avgMode);
+                    String displayText = "Chill Vibes Meter: \n\n" + f.format(avgAcousticness);
 
                     setTextAsync(displayText, analysisTextView);
 
                 } catch (JSONException e) {
                     Log.d("JSON", "Failed to parse data: " + e);
-                    Toast.makeText(WrappedSongAnalysis.this, "Failed to parse data, watch Logcat for more details",
+                    Toast.makeText(WrappedAcousticness.this, "Failed to parse data, watch Logcat for more details",
                             Toast.LENGTH_SHORT).show();
                 }
             }

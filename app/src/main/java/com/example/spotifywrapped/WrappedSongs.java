@@ -37,6 +37,7 @@ public class WrappedSongs extends AppCompatActivity {
 
     private TextView songTextView;
     private Call mCall;
+    private String[] topSongsFinal;
 
 
     @Override
@@ -67,6 +68,7 @@ public class WrappedSongs extends AppCompatActivity {
                 Intent intent = new Intent(WrappedSongs.this, WrappedArtists.class);
                 Bundle bundle = new Bundle();
                 bundle.putString("token", mAccessToken);
+                bundle.putStringArray("topSongs", topSongsFinal);
                 intent.putExtras(bundle);
                 startActivity(intent);
             }
@@ -100,12 +102,15 @@ public class WrappedSongs extends AppCompatActivity {
                     int topSongsLength = Math.min(topSongs.length(), 5);
                     String names = "";
 
+                    topSongsFinal = new String[topSongsLength];
+
                     for (int i = 0; i < topSongsLength; i++) {
                         String name = ((JSONObject) (topSongs.get(i))).getString("name");
                         names = names.concat((i+1) + ". " + name + "\n");
+                        topSongsFinal[i] = name;
                     }
 
-                    names = "TOP SONGS: \n\n" + names;
+                    names = "YOUR TOP SONGS: \n\n" + names;
 
                     setTextAsync(names, songTextView);
 

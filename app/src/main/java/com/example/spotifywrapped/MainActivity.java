@@ -47,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
         Bundle bundle1 = getIntent().getExtras();
         if (bundle1 != null) {
             mAccessToken = bundle1.getString("token");
+            // TODO - save wrapped info in bundle to database here
         }
 
 

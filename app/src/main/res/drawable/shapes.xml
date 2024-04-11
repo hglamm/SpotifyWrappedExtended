@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- res/drawable/psychedelic_shapes.xml -->
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <!-- Background Gradient -->
     <item>
