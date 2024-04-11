@@ -7,7 +7,7 @@
     >
 
     <TextView
-        android:textSize="20sp"
+        android:textSize="24sp"
         android:fontFamily="@font/circular"
         android:textColor="@color/white"
         android:id="@+id/wrapped_artists_text"

@@ -42,7 +42,7 @@ public class WrappedMode extends AppCompatActivity {
 
     private void showWrappedMode() {
         DecimalFormat f = new DecimalFormat("##.00");
-        setTextAsync("MOOD METER \n\n Average Mode: " + f.format(avgMode), modeTextView);
+        setTextAsync("MOOD METER \n\n Average Mode: " + Math.round(avgMode*100) + " / 100", modeTextView);
     }
 
     public void setTextAsync(final String text, TextView textView) {

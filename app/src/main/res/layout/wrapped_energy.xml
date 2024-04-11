@@ -7,13 +7,12 @@
     >
 
     <TextView
-        android:textSize="20sp"
+        android:textSize="28sp"
         android:fontFamily="@font/circular"
         android:textColor="@color/white"
         android:id="@+id/wrapped_energy_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="start|center_vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -22,6 +21,7 @@
         android:shadowDx="3"
         android:shadowDy="3"
         android:shadowRadius="6"
+        android:gravity="center_horizontal"
 
         />
 </androidx.constraintlayout.widget.ConstraintLayout>

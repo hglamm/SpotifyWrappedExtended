@@ -101,11 +101,11 @@ public class WrappedArtists extends AppCompatActivity {
 
                     for (int i = 0; i < topArtistsLength; i++) {
                         String name = ((JSONObject) (topArtists.get(i))).getString("name");
-                        names = names.concat((i+1) + ". " + name + "\n");
+                        names = names.concat((i+1) + ". " + name + "\n\n");
                         topArtistsFinal[i] = name;
                     }
 
-                    names = "TOP ARTISTS: \n\n" + names;
+                    names = "TOP ARTISTS: \n\n\n" + names;
 
                     setTextAsync(names, artistTextView);
 

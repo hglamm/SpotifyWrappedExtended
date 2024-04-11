@@ -4,24 +4,52 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/wrapped_instrument_background"
+    android:layout_gravity="center_horizontal"
+    android:layout_margin="8dp"
     >
 
     <TextView
-        android:textSize="20sp"
+        android:textSize="28sp"
         android:fontFamily="@font/circular"
         android:textColor="@color/white"
         android:id="@+id/wrapped_instrument_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="start|center_vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintVertical_chainStyle="packed"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/instrument"
         android:shadowColor="@color/black"
         android:shadowDx="3"
         android:shadowDy="3"
         android:shadowRadius="6"
-
+        android:layout_margin="8dp"
+        android:gravity="center_horizontal"
         />
+
+    <TextView
+        android:textSize="24sp"
+        android:id="@+id/instrument"
+        android:fontFamily="@font/circular"
+        android:textColor="@color/white"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:shadowColor="@color/black"
+        android:shadowDx="3"
+        android:shadowDy="3"
+        android:shadowRadius="6"
+        app:layout_constraintTop_toBottomOf="@+id/wrapped_instrument_text"
+        android:text="Instrumentalness is a measure of if songs have words or not."
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintVertical_chainStyle="packed"
+        app:layout_constraintHorizontal_bias="0.5"
+        android:layout_margin="8dp"
+        android:gravity="center_horizontal"
+        />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -42,7 +42,7 @@ public class WrappedDanceability extends AppCompatActivity {
 
     private void showWrappedDance() {
         DecimalFormat f = new DecimalFormat("##.00");
-        setTextAsync("DANCE FLOOR DELIGHTS \n\n Average Danceability: " + f.format(avgDanceability), danceTextView);
+        setTextAsync("DANCE FLOOR DELIGHTS \n\n Average Danceability: \n" + Math.round(avgDanceability*100) + " / 100", danceTextView);
     }
 
     public void setTextAsync(final String text, TextView textView) {

@@ -171,7 +171,7 @@ public class WrappedAcousticness extends AppCompatActivity {
                     avgLoudness /= topSongsAudioFeatures.length();
                     avgMode /= topSongsAudioFeatures.length();
 
-                    String displayText = "Chill Vibes Meter: \n\n" + f.format(avgAcousticness);
+                    String displayText = "Chill Vibes Meter: \n\n" + (Math.round(avgAcousticness*100) + " / 100");
 
                     setTextAsync(displayText, analysisTextView);
 

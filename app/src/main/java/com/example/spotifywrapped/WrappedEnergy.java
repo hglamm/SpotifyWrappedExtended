@@ -42,7 +42,7 @@ public class WrappedEnergy extends AppCompatActivity {
 
     private void showWrappedEnergy() {
         DecimalFormat f = new DecimalFormat("##.00");
-        setTextAsync("ENERGY BOOSTER: \n\n" + f.format(avgEnergy), energyTextView);
+        setTextAsync("ENERGY BOOSTER: \n\nAverage Energy: " + Math.round(avgEnergy*100) + " / 100", energyTextView);
     }
     public void setTextAsync(final String text, TextView textView) {
         runOnUiThread(() -> textView.setText(text));

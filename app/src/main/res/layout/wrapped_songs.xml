@@ -6,7 +6,7 @@
     android:background="@drawable/wrapped_songs_background"
     >
     <TextView
-        android:textSize="20sp"
+        android:textSize="24sp"
         android:textColor="@color/white"
         android:fontFamily="@font/circular"
         android:id="@+id/wrapped_songs_text"

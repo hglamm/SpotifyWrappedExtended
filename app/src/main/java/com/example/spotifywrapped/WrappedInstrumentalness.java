@@ -41,7 +41,7 @@ public class WrappedInstrumentalness extends AppCompatActivity {
 
     private void showWrappedInstrument() {
         DecimalFormat f = new DecimalFormat("##.00");
-        setTextAsync("MUSICAL MASTERY \n\n Average Instrumentalness: " + f.format(avgInstrumentalness), instrumentalnessTextView);
+        setTextAsync("MUSICAL MASTERY \n\nAverage Instrumentalness: " + Math.round(avgInstrumentalness * 100) + " / 100", instrumentalnessTextView);
     }
 
     public void setTextAsync(final String text, TextView textView) {

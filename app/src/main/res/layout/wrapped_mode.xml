@@ -7,14 +7,13 @@
     >
 
     <TextView
-        android:textSize="20sp"
+        android:textSize="28sp"
         android:fontFamily="@font/circular"
         android:textColor="@color/white"
         android:id="@+id/wrapped_mode_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="start|center_vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:gravity="center_horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -22,6 +21,30 @@
         android:shadowDx="3"
         android:shadowDy="3"
         android:shadowRadius="6"
+        app:layout_constraintVertical_chainStyle="packed"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintBottom_toTopOf="@+id/mode"
 
         />
+
+    <TextView
+        android:textSize="24sp"
+        android:fontFamily="@font/circular"
+        android:textColor="@color/white"
+        android:id="@+id/mode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:shadowColor="@color/black"
+        android:shadowDx="3"
+        android:shadowDy="3"
+        android:shadowRadius="6"
+        app:layout_constraintTop_toBottomOf="@+id/wrapped_mode_text"
+        android:text="Mode is a measure of if songs are in a major key or not."
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintVertical_chainStyle="packed"
+        app:layout_constraintHorizontal_bias="0.5"
+        android:layout_margin="16dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>

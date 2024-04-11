@@ -43,8 +43,11 @@ public class WrappedLoudness extends AppCompatActivity {
     }
 
     private void showWrappedLoudness() {
-        DecimalFormat f = new DecimalFormat("##.00");
-        setTextAsync("VOLUME UP! \n\n Average Loudness: " + f.format(avgLoudness), loudnessTextView);
+        DecimalFormat f = new DecimalFormat("##");
+        double opp = Math.abs(avgLoudness) / 60.0;
+        double format = 1.0 - opp;
+
+        setTextAsync("VOLUME UP! \n\n Average Loudness: " + f.format(format*100) + " / 100", loudnessTextView);
     }
 
     public void setTextAsync(final String text, TextView textView) {

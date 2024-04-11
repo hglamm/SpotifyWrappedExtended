@@ -106,11 +106,11 @@ public class WrappedSongs extends AppCompatActivity {
 
                     for (int i = 0; i < topSongsLength; i++) {
                         String name = ((JSONObject) (topSongs.get(i))).getString("name");
-                        names = names.concat((i+1) + ". " + name + "\n");
+                        names = names.concat((i+1) + ". " + name + "\n\n");
                         topSongsFinal[i] = name;
                     }
 
-                    names = "YOUR TOP SONGS: \n\n" + names;
+                    names = "YOUR TOP SONGS: \n\n\n" + names;
 
                     setTextAsync(names, songTextView);
 
