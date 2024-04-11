@@ -1,6 +1,7 @@
 package com.example.spotifywrapped;
 
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.util.Log;
@@ -43,6 +44,8 @@ public class WrappedAcousticness extends AppCompatActivity {
     double avgInstrumentalness = 0.0;
     double avgLoudness = 0.0;
     private double avgMode = 0.0;
+    private MediaPlayer mediaPlayer;
+    private String[] previewURLS;
 
 
     @Override
@@ -52,6 +55,7 @@ public class WrappedAcousticness extends AppCompatActivity {
 
         Bundle bundle = getIntent().getExtras();
         mAccessToken = bundle.getString("token");
+        previewURLS = bundle.getStringArray("previewURLs");
 
         analysisTextView = (TextView) findViewById(R.id.wrapped_analysis_text);
 
@@ -79,10 +83,26 @@ public class WrappedAcousticness extends AppCompatActivity {
                 bundle.putDouble("avgLoudness", avgLoudness);
                 bundle.putDouble("avgMode", avgMode);
                 intent.putExtras(bundle);
+                mediaPlayer.stop();
                 startActivity(intent);
             }
         };
         timer.start();
+
+        mediaPlayer = new MediaPlayer();
+        try {
+            mediaPlayer.setDataSource(previewURLS[2]);
+            mediaPlayer.prepareAsync();
+            mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                @Override
+                public void onPrepared(MediaPlayer mp) {
+                    // Start playback
+                    mediaPlayer.start();
+                }
+            });
+        } catch (Exception e) {
+            Toast.makeText(WrappedAcousticness.this, "Failed to load media", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void showWrappedAnalysis() {

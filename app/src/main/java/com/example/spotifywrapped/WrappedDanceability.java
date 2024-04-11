@@ -1,9 +1,11 @@
 package com.example.spotifywrapped;
 
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -12,6 +14,8 @@ import java.text.DecimalFormat;
 public class WrappedDanceability extends AppCompatActivity {
     private TextView danceTextView;
     private double avgDanceability = 0.0;
+    private MediaPlayer mediaPlayer;
+    private String[] previewURLs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,6 +24,7 @@ public class WrappedDanceability extends AppCompatActivity {
 
         Bundle bundle = getIntent().getExtras();
         avgDanceability = bundle.getDouble("avgDanceability");
+        previewURLs = bundle.getStringArray("previewURLs");
 
         danceTextView = (TextView) findViewById(R.id.wrapped_danceability_text);
 
@@ -34,10 +39,26 @@ public class WrappedDanceability extends AppCompatActivity {
             public void onFinish() {
                 Intent intent = new Intent(WrappedDanceability.this, WrappedInstrumentalness.class);
                 intent.putExtras(bundle);
+                mediaPlayer.stop();
                 startActivity(intent);
             }
         };
         timer.start();
+
+        mediaPlayer = new MediaPlayer();
+        try {
+            mediaPlayer.setDataSource(previewURLs[0]);
+            mediaPlayer.prepareAsync();
+            mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                @Override
+                public void onPrepared(MediaPlayer mp) {
+                    // Start playback
+                    mediaPlayer.start();
+                }
+            });
+        } catch (Exception e) {
+            Toast.makeText(WrappedDanceability.this, "Failed to load media", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void showWrappedDance() {

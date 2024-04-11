@@ -1,6 +1,7 @@
 package com.example.spotifywrapped;
 
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.util.Log;
@@ -34,6 +35,9 @@ public class WrappedArtists extends AppCompatActivity {
     private TextView artistTextView;
     private Call mCall;
     private String[] topArtistsFinal;
+    private MediaPlayer mediaPlayer;
+    private String[] previewURLS;
+
 
 
     @Override
@@ -43,6 +47,7 @@ public class WrappedArtists extends AppCompatActivity {
 
         Bundle bundle = getIntent().getExtras();
         mAccessToken = bundle.getString("token");
+        previewURLS = bundle.getStringArray("previewURLs");
 
         artistTextView = (TextView) findViewById(R.id.wrapped_artists_text);
 
@@ -65,10 +70,27 @@ public class WrappedArtists extends AppCompatActivity {
                 bundle.putString("token", mAccessToken);
                 bundle.putStringArray("topArtists", topArtistsFinal);
                 intent.putExtras(bundle);
+                mediaPlayer.stop();
                 startActivity(intent);
             }
         };
         timer.start();
+
+        mediaPlayer = new MediaPlayer();
+        try {
+            mediaPlayer.setDataSource(previewURLS[1]);
+            mediaPlayer.prepareAsync();
+            mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                @Override
+                public void onPrepared(MediaPlayer mp) {
+                    // Start playback
+                    mediaPlayer.start();
+                }
+            });
+        } catch (Exception e) {
+            Toast.makeText(WrappedArtists.this, "Failed to load media", Toast.LENGTH_SHORT).show();
+        }
+
     }
 
     private void showWrappedArtists() {
