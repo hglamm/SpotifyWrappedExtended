@@ -1,16 +1,28 @@
 package com.example.spotifywrapped;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+
 import android.os.Bundle;
 import android.content.Intent;
-import android.net.Uri;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.spotify.sdk.android.auth.AuthorizationClient;
 import com.spotify.sdk.android.auth.AuthorizationRequest;
 import com.spotify.sdk.android.auth.AuthorizationResponse;
@@ -19,6 +31,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -29,6 +43,10 @@ import okhttp3.Response;
 public class MainActivity extends AppCompatActivity {
 
     private static FirebaseAuth fireAu = SignOnActivity.getAuth();
+    private FirebaseDatabase datBa;
+    private DatabaseReference dRef;
+    private DataSnapshot dSnap;
+    private FirebaseUser user;
 
     public static final int AUTH_TOKEN_REQUEST_CODE = 0;
     public static final int AUTH_CODE_REQUEST_CODE = 1;
@@ -40,20 +58,78 @@ public class MainActivity extends AppCompatActivity {
     private Button loginBtn;
 
     private TextView welcomeTextView, codeTextView, profileTextView;
+    private String topSongs;
+    private String topArtists;
+    private double avgEnergy;
+    private double avgDanceability;
+    private double avgInstrumentalness;
+    private double avgLoudness;
+    private double avgMode;
+    private String id;
+    private static String wrapName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
         Bundle bundle1 = getIntent().getExtras();
+
+        Fragment fraggy = new WrappedNameFragment();
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView, fraggy)
+                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).commit();
+        //findViewById(R.id.fragmentContainerView).setVisibility(View.VISIBLE);
+
+        //Button conf = (Button) findViewById(R.id.confyButt);
 
         if (bundle1 != null) {
             mAccessToken = bundle1.getString("token");
-            String[] topSongs = bundle1.getStringArray("topSongs");
-            // TODO - save wrapped info in bundle to database here
+            datBa = FirebaseDatabase.getInstance();
+            dRef = datBa.getReference();
+            user = fireAu.getCurrentUser();
+            id = user.getUid();
+             Task<DataSnapshot> t = dRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DataSnapshot> task) {
+                    dSnap = task.getResult();
+                    if (wrapName != null) {
+                        addDataToBase(wrapName);
+                        wrapName = null;
+                    }
 
+                }
+            });
+
+            dRef.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    dSnap = snapshot;
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
+
+            String[] topSongsArr = bundle1.getStringArray("topSongs");
+            topSongs = "";
+            String[] topArtistsArr = bundle1.getStringArray("topArtists");
+            topArtists = "";
+            for (int i = 0; i < topArtistsArr.length; i++) {
+                topSongs = String.format("%s%d. %s%n", topSongs, (i + 1), topSongsArr[i]);
+            }
+            for(int i = 0; i < topArtistsArr.length; i++) {
+                topArtists = String.format("%s%d. %s%n", topArtists, (i + 1), topArtistsArr[i]);
+            }
+
+            avgEnergy = secondDeci(bundle1.getDouble("avgEnergy"));
+            avgDanceability = secondDeci(bundle1.getDouble("avgDanceability"));
+            avgInstrumentalness = secondDeci(bundle1.getDouble("avgInstrumentalness"));
+            avgLoudness = secondDeci(bundle1.getDouble("avgLoudness"));
+            avgMode = secondDeci(bundle1.getDouble("avgMode"));
         }
 
-        setContentView(R.layout.activity_main);
         accEmail = getIntent().getStringExtra("val");
         // Initialize the views
         welcomeTextView = (TextView) findViewById(R.id.welcome_text_view);
@@ -68,6 +144,7 @@ public class MainActivity extends AppCompatActivity {
         loginBtn = (Button) findViewById(R.id.login_btn);
         Button settingBtn = (Button) findViewById(R.id.accSettings);
         Button wrappedBtn = (Button) findViewById(R.id.wrapped_btn);
+        Button pastWrapped = (Button) findViewById(R.id.PastSummaries);
 
         if (mAccessToken != null) {
             loginBtn.setVisibility(View.INVISIBLE);
@@ -77,15 +154,28 @@ public class MainActivity extends AppCompatActivity {
         // Set the click listeners for the buttons
 
         wrappedBtn.setOnClickListener((v) -> {
-            if (mAccessToken == null) {
-                Toast.makeText(MainActivity.this, "You must log into Spotify first.", Toast.LENGTH_SHORT).show();
-                return;
-            }
-            Intent intent = new Intent(MainActivity.this, WrappedSongs.class);
-            Bundle bundle = new Bundle();
-            bundle.putString("token", mAccessToken);
-            intent.putExtras(bundle);
-            startActivity(intent);
+                if (mAccessToken == null) {
+                    Toast.makeText(MainActivity.this, "You must log into Spotify first.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                findViewById(R.id.fragmentContainerView).setVisibility(View.VISIBLE);
+                Button conf = (Button) findViewById(R.id.confyButt);
+                conf.setOnClickListener((vv) -> {
+                        wrapName = ((EditText)(findViewById(R.id.confWrappedTxt))).getText().toString();
+                        if (wrapName == null || wrapName.length() == 0) {
+                            Toast.makeText(MainActivity.this, "You must enter a name.", Toast.LENGTH_SHORT).show();
+
+                        } else {
+                            findViewById(R.id.fragmentContainerView).setVisibility(View.GONE);
+                            Intent intent = new Intent(MainActivity.this, WrappedSongs.class);
+                            Bundle bundle = new Bundle();
+                            bundle.putString("token", mAccessToken);
+                            intent.putExtras(bundle);
+                            startActivity(intent);
+                        }
+                });
+
+
         });
 
         loginBtn.setOnClickListener((v) -> {
@@ -106,6 +196,11 @@ public class MainActivity extends AppCompatActivity {
 
         settingBtn.setOnClickListener((v) -> {
             Intent thing = new Intent(MainActivity.this, SettingsActivity.class);
+            startActivity(thing);
+        });
+
+        pastWrapped.setOnClickListener((v) -> {
+            Intent thing = new Intent(MainActivity.this, ViewPastSummaries.class);
             startActivity(thing);
         });
 
@@ -218,6 +313,45 @@ public class MainActivity extends AppCompatActivity {
         } else if (AUTH_CODE_REQUEST_CODE == requestCode) {
             mAccessCode = response.getCode();
         }
+    }
+    public void addDataToBase(String wrapName) {
+        boolean cont = true;
+        if (wrapName == null || wrapName.length() == 0) {
+            Toast.makeText(MainActivity.this, "Your wrap name can't be null", Toast.LENGTH_SHORT).show();
+        } else {
+            for(DataSnapshot ds: dSnap.getChildren()) {
+                String thingy = ds.getKey();
+                if (thingy.equals(id)) {
+                    DataSnapshot snappy = ds.child("pastWrap");
+                    DatabaseReference daty = snappy.getRef();
+                    Map<String, Object> thing = new HashMap<String, Object>();
+                    thing.put(wrapName, null);
+                    daty.updateChildren(thing);
+
+                }
+            }
+            DataSnapshot d1 = dSnap.child(id);
+            DataSnapshot d2 = d1.child("pastWrap");
+            DataSnapshot d3 = d2.child(wrapName);
+                    DatabaseReference daty = d3.getRef();
+                    Map<String, Object> thing = new HashMap<>();
+                    thing.put("topSongs", topSongs);
+                    thing.put("topArtists", topArtists);
+                    thing.put("avgEnergy", avgEnergy);
+                    thing.put("avgDanceability", avgDanceability);
+                    thing.put("avgInstrumentalness", avgInstrumentalness);
+                    thing.put("avgLoudness", avgLoudness);
+                    thing.put("avgMode", avgMode);
+                    daty.updateChildren(thing).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            Toast.makeText(MainActivity.this, "Your new summary has been added", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        }
+    }
+    public double secondDeci(double d) {
+        return ((double)((int)(d * 100))) / 100;
     }
 
 }
