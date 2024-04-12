@@ -133,14 +133,9 @@ public class MainActivity extends AppCompatActivity {
         accEmail = getIntent().getStringExtra("val");
         // Initialize the views
         welcomeTextView = (TextView) findViewById(R.id.welcome_text_view);
-        codeTextView = (TextView) findViewById(R.id.code_text_view);
-        profileTextView = (TextView) findViewById(R.id.response_text_view);
 
 
         // Initialize the buttons
-        Button tokenBtn = (Button) findViewById(R.id.token_btn);
-        Button codeBtn = (Button) findViewById(R.id.code_btn);
-        Button profileBtn = (Button) findViewById(R.id.profile_btn);
         loginBtn = (Button) findViewById(R.id.login_btn);
         Button settingBtn = (Button) findViewById(R.id.accSettings);
         Button wrappedBtn = (Button) findViewById(R.id.wrapped_btn);
@@ -180,18 +175,6 @@ public class MainActivity extends AppCompatActivity {
 
         loginBtn.setOnClickListener((v) -> {
             getToken();
-        });
-
-        tokenBtn.setOnClickListener((v) -> {
-            getToken();
-        });
-
-        codeBtn.setOnClickListener((v) -> {
-            getCode();
-        });
-
-        profileBtn.setOnClickListener((v) -> {
-            onGetUserProfileClicked();
         });
 
         settingBtn.setOnClickListener((v) -> {
