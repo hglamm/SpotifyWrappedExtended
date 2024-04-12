@@ -40,6 +40,13 @@
             android:text="View Current Wrapped"
             />
 
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/fragmentContainerView"
+            android:name="com.example.spotifywrapped.WrappedNameFragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone" />
+
         <Button
             android:id="@+id/token_btn"
             android:layout_width="match_parent"
