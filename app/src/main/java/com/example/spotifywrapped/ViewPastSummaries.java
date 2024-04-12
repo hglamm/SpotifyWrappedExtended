@@ -1,5 +1,6 @@
 package com.example.spotifywrapped;
 
+import android.content.Intent;
 import android.database.DataSetObserver;
 import android.os.Bundle;
 
@@ -22,7 +23,6 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
-import com.example.spotifywrapped.databinding.ActivityViewPastSummariesBinding;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -58,6 +58,7 @@ public class ViewPastSummaries extends AppCompatActivity {
         user = auth.getCurrentUser();
         userId = user.getUid();
         Button confirm = (Button) findViewById(R.id.sumConf);
+        Button backBtn = findViewById(R.id.backButton);
 
         dRef.addValueEventListener(new ValueEventListener() {
             @Override
@@ -79,6 +80,11 @@ public class ViewPastSummaries extends AppCompatActivity {
             ((TextView) findViewById(R.id.sumBox)).setText(thing);
         });
 
+        backBtn.setOnClickListener((v) -> {
+            Intent intent = new Intent(ViewPastSummaries.this, MainActivity.class);
+            startActivity(intent);
+        });
+
 
 
 
@@ -87,8 +93,30 @@ public class ViewPastSummaries extends AppCompatActivity {
         String val = (String) spin.getSelectedItem();
         String ret = "";
         DataSnapshot d1 = dSnap.child(userId).child("pastWrap").child(val);
+        int count = 0;
         for (DataSnapshot ds : d1.getChildren()) {
-            ret = String.format("%s%n%s%n%s", ret, ds.getKey(), ds.getValue());
+            String newKey;
+            switch (count) {
+                case 0: newKey = "Average Danceability: ";
+                        ret = String.format("%s%n%n%s%n%s", ret, newKey, ds.getValue() + " / 1");
+                        break;
+                case 1: newKey = "Average Energy: ";
+                        ret = String.format("%s%n%n%s%n%s", ret, newKey, ds.getValue() + " / 1");
+                        break;
+                case 2: newKey = "Average Instrumentalness: ";
+                        ret = String.format("%s%n%n%s%n%s", ret, newKey, ds.getValue() + " / 1");
+                        break;
+                case 3: newKey = "Average Loudness: ";
+                        ret = String.format("%s%n%n%s%n%s", ret, newKey, ds.getValue() + " dB");
+                        break;
+                case 4: newKey = "Average Mode: ";
+                        ret = String.format("%s%n%n%s%n%s", ret, newKey, ds.getValue() + " / 1");
+                        break;
+                default:
+                        ret = String.format("%s%n%n%s%n%s", ret, ds.getKey(), ds.getValue());
+
+            }
+            count++;
         }
         return ret;
     }

@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id = "@+id/create_acc_acc">
+    android:id = "@+id/create_acc_acc"
+    >
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="409dp"
@@ -13,6 +14,16 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
+
+        <Button
+            android:id="@+id/backButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:text="Back"
+            />
 
         <Spinner
             android:id="@+id/sumSpinner"
@@ -24,20 +35,24 @@
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.265" />
+            app:layout_constraintVertical_bias="0.265"
+            android:layout_marginStart="16dp"
+            />
 
         <TextView
             android:id="@+id/sumBox"
             android:layout_width="400dp"
             android:layout_height="wrap_content"
-            android:text="TextView"
-            android:textSize="16sp"
+            android:textSize="14sp"
+            android:fontFamily="@font/circular"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/sumSpinner"
-            app:layout_constraintVertical_bias="0.257" />
+            app:layout_constraintTop_toBottomOf="@+id/sumConf"
+            app:layout_constraintVertical_bias="0.257"
+            android:layout_marginStart="16dp"
+            android:gravity="left"/>
 
         <TextView
             android:id="@+id/textView4"
@@ -49,6 +64,8 @@
             app:layout_constraintHorizontal_bias="0.497"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            android:gravity="center_horizontal"
+            android:textSize="20dp"
             app:layout_constraintVertical_bias="0.541" />
 
         <Button
