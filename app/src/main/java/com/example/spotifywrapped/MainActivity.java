@@ -123,7 +123,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
             avgEnergy = secondDeci(bundle1.getDouble("avgEnergy"));
-            avgDanceability = secondDeci(bundle1.getDouble("avgDancability"));
+            avgDanceability = secondDeci(bundle1.getDouble("avgDanceability"));
             avgInstrumentalness = secondDeci(bundle1.getDouble("avgInstrumentalness"));
             avgLoudness = secondDeci(bundle1.getDouble("avgLoudness"));
             avgMode = secondDeci(bundle1.getDouble("avgMode"));
@@ -149,6 +149,7 @@ public class MainActivity extends AppCompatActivity {
         loginBtn = (Button) findViewById(R.id.login_btn);
         Button settingBtn = (Button) findViewById(R.id.accSettings);
         Button wrappedBtn = (Button) findViewById(R.id.wrapped_btn);
+        Button pastWrapped = (Button) findViewById(R.id.PastSummaries);
 
         if (mAccessToken != null) {
             loginBtn.setVisibility(View.INVISIBLE);
@@ -200,6 +201,11 @@ public class MainActivity extends AppCompatActivity {
 
         settingBtn.setOnClickListener((v) -> {
             Intent thing = new Intent(MainActivity.this, SettingsActivity.class);
+            startActivity(thing);
+        });
+
+        pastWrapped.setOnClickListener((v) -> {
+            Intent thing = new Intent(MainActivity.this, ViewPastSummaries.class);
             startActivity(thing);
         });
 
