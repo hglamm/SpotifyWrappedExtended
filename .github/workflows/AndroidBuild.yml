@@ -1,0 +1,35 @@
+name: AndroidBuild
+on:
+  pull_request:
+    branches: [ main, user-story-10 ]
+  push:
+    branches: [ main, user-story-10 ]
+
+jobs:
+  build:
+    runs-on: self-hosted
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        env:
+           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}$
+
+      - name: Setup Java JDK
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: adopt
+          cache: gradle
+
+      - name: Give permission to Gradle
+        run: chmod +x gradlew
+        
+      - name: Build with Gradle
+        run: ./gradlew build --scan
+
+      - name: Upload a build Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: SpotifyWrapped.apk
+          path: app/build/outputs/apk/debug/app-debug.apk
+

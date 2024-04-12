@@ -8,9 +8,6 @@
 .gradle/
 build/
 
-# Local configuration file (sdk path, etc)
-local.properties
-
 # Log/OS Files
 *.log
 
@@ -37,3 +34,6 @@ google-services.json
 
 # Android Profiling
 *.hprof
+
+# Actions Runner
+actions-runner
