@@ -1,4 +1,4 @@
-package com.example.spotifywrapped;
+package com.example.spotifywrapped.wrapped;
 
 import android.content.Intent;
 import android.media.MediaPlayer;
@@ -9,25 +9,28 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.spotifywrapped.R;
+
 import java.text.DecimalFormat;
 
-public class WrappedInstrumentalness extends AppCompatActivity {
-    private TextView instrumentalnessTextView;
-    double avgInstrumentalness = 0.0;
+public class WrappedDanceability extends AppCompatActivity {
+    private TextView danceTextView;
+    private double avgDanceability = 0.0;
     private MediaPlayer mediaPlayer;
-    private String[] previewURLS;
+    private String[] previewURLs;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.wrapped_instrumentalness);
+        setContentView(R.layout.wrapped_danceability);
 
         Bundle bundle = getIntent().getExtras();
-        avgInstrumentalness = bundle.getDouble("avgInstrumentalness");
-        previewURLS = bundle.getStringArray("previewURLs");
+        avgDanceability = bundle.getDouble("avgDanceability");
+        previewURLs = bundle.getStringArray("previewURLs");
 
-        instrumentalnessTextView = (TextView) findViewById(R.id.wrapped_instrument_text);
+        danceTextView = (TextView) findViewById(R.id.wrapped_danceability_text);
 
-        showWrappedInstrument();
+        showWrappedDance();
         CountDownTimer timer = new CountDownTimer(5000, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
@@ -36,7 +39,7 @@ public class WrappedInstrumentalness extends AppCompatActivity {
 
             @Override
             public void onFinish() {
-                Intent intent = new Intent(WrappedInstrumentalness.this, WrappedMode.class);
+                Intent intent = new Intent(WrappedDanceability.this, WrappedInstrumentalness.class);
                 intent.putExtras(bundle);
                 mediaPlayer.stop();
                 startActivity(intent);
@@ -46,7 +49,7 @@ public class WrappedInstrumentalness extends AppCompatActivity {
 
         mediaPlayer = new MediaPlayer();
         try {
-            mediaPlayer.setDataSource(previewURLS[1]);
+            mediaPlayer.setDataSource(previewURLs[0]);
             mediaPlayer.prepareAsync();
             mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
                 @Override
@@ -56,13 +59,13 @@ public class WrappedInstrumentalness extends AppCompatActivity {
                 }
             });
         } catch (Exception e) {
-            Toast.makeText(WrappedInstrumentalness.this, "Failed to load media", Toast.LENGTH_SHORT).show();
+            Toast.makeText(WrappedDanceability.this, "Failed to load media", Toast.LENGTH_SHORT).show();
         }
     }
 
-    private void showWrappedInstrument() {
+    private void showWrappedDance() {
         DecimalFormat f = new DecimalFormat("##.00");
-        setTextAsync("MUSICAL MASTERY \n\nAverage Instrumentalness: " + Math.round(avgInstrumentalness * 100) + " / 100", instrumentalnessTextView);
+        setTextAsync("DANCE FLOOR DELIGHTS \n\n Average Danceability: \n" + Math.round(avgDanceability*100) + " / 100", danceTextView);
     }
 
     public void setTextAsync(final String text, TextView textView) {

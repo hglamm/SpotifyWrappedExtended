@@ -1,17 +1,17 @@
-package com.example.spotifywrapped;
+package com.example.spotifywrapped.wrapped;
 
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.util.Log;
-import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.Toolbar;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.spotifywrapped.APIInteraction;
+import com.example.spotifywrapped.R;
 import com.spotify.sdk.android.auth.AuthorizationClient;
 import com.spotify.sdk.android.auth.AuthorizationRequest;
 import com.spotify.sdk.android.auth.AuthorizationResponse;
@@ -19,7 +19,6 @@ import com.spotify.sdk.android.auth.AuthorizationResponse;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.io.IOException;
 
@@ -29,37 +28,37 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
-public class WrappedSongs extends AppCompatActivity {
+public class WrappedArtists extends AppCompatActivity {
 
     private String mAccessToken;
     private final OkHttpClient mOkHttpClient = new OkHttpClient();
-
     public static final int AUTH_TOKEN_REQUEST_CODE = 0;
     public static final int AUTH_CODE_REQUEST_CODE = 1;
-
-    private TextView songTextView;
+    private TextView artistTextView;
     private Call mCall;
-    private String[] topSongsFinal;
-    private String[] previewURLS;
+    private String[] topArtistsFinal;
     private MediaPlayer mediaPlayer;
+    private String[] previewURLS;
+
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.wrapped_songs);
+        setContentView(R.layout.wrapped_artists);
 
         Bundle bundle = getIntent().getExtras();
         mAccessToken = bundle.getString("token");
+        previewURLS = bundle.getStringArray("previewURLs");
 
-        songTextView = (TextView) findViewById(R.id.wrapped_songs_text);
+        artistTextView = (TextView) findViewById(R.id.wrapped_artists_text);
 
         if (mAccessToken == null) {
             final AuthorizationRequest request = APIInteraction.getAuthenticationRequest(AuthorizationResponse.Type.TOKEN);
-            AuthorizationClient.openLoginActivity(WrappedSongs.this, 3, request);
+            AuthorizationClient.openLoginActivity(WrappedArtists.this, 3, request);
         }
 
-        showWrappedSongs();
+        showWrappedArtists();
 
         CountDownTimer timer = new CountDownTimer(5000, 1000) {
             @Override
@@ -69,22 +68,36 @@ public class WrappedSongs extends AppCompatActivity {
 
             @Override
             public void onFinish() {
-                Intent intent = new Intent(WrappedSongs.this, WrappedArtists.class);
-                Bundle bundle = new Bundle();
+                Intent intent = new Intent(WrappedArtists.this, WrappedAcousticness.class);
                 bundle.putString("token", mAccessToken);
-                bundle.putStringArray("topSongs", topSongsFinal);
-                bundle.putStringArray("previewURLs", previewURLS);
+                bundle.putStringArray("topArtists", topArtistsFinal);
                 intent.putExtras(bundle);
                 mediaPlayer.stop();
                 startActivity(intent);
             }
         };
         timer.start();
+
+        mediaPlayer = new MediaPlayer();
+        try {
+            mediaPlayer.setDataSource(previewURLS[1]);
+            mediaPlayer.prepareAsync();
+            mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                @Override
+                public void onPrepared(MediaPlayer mp) {
+                    // Start playback
+                    mediaPlayer.start();
+                }
+            });
+        } catch (Exception e) {
+            Toast.makeText(WrappedArtists.this, "Failed to load media", Toast.LENGTH_SHORT).show();
+        }
+
     }
 
-    private void showWrappedSongs() {
+    private void showWrappedArtists() {
         final Request request1 = new Request.Builder()
-                .url("https://api.spotify.com/v1/me/top/tracks?limit=5")
+                .url("https://api.spotify.com/v1/me/top/artists")
                 .addHeader("Authorization", "Bearer " + mAccessToken)
                 .build();
 
@@ -95,7 +108,7 @@ public class WrappedSongs extends AppCompatActivity {
             @Override
             public void onFailure(Call call, IOException e) {
                 Log.d("HTTP", "Failed to fetch data: " + e);
-                Toast.makeText(WrappedSongs.this, "Failed to fetch data, watch Logcat for more details",
+                Toast.makeText(WrappedArtists.this, "Failed to fetch data, watch Logcat for more details",
                         Toast.LENGTH_SHORT).show();
             }
 
@@ -103,44 +116,26 @@ public class WrappedSongs extends AppCompatActivity {
             public void onResponse(Call call, Response response) throws IOException {
                 try {
                     final JSONObject jsonObject = new JSONObject(response.body().string());
-                    JSONArray topSongs = jsonObject.getJSONArray("items");
+                    JSONArray topArtists = jsonObject.getJSONArray("items");
 
-                    int topSongsLength = Math.min(topSongs.length(), 5);
+                    int topArtistsLength = Math.min(topArtists.length(), 5);
                     String names = "";
 
-                    topSongsFinal = new String[topSongsLength];
-                    previewURLS = new String[topSongsLength];
+                    topArtistsFinal = new String[topArtistsLength];
 
-                    for (int i = 0; i < topSongsLength; i++) {
-                        String name = ((JSONObject) (topSongs.get(i))).getString("name");
-                        String previewURL = ((JSONObject) (topSongs.get(i))).getString("preview_url");
+                    for (int i = 0; i < topArtistsLength; i++) {
+                        String name = ((JSONObject) (topArtists.get(i))).getString("name");
                         names = names.concat((i+1) + ". " + name + "\n\n");
-                        topSongsFinal[i] = name;
-                        previewURLS[i] = previewURL;
+                        topArtistsFinal[i] = name;
                     }
 
-                    names = "YOUR TOP SONGS: \n\n\n" + names;
+                    names = "TOP ARTISTS: \n\n\n" + names;
 
-                    setTextAsync(names, songTextView);
-
-                    mediaPlayer = new MediaPlayer();
-                    try {
-                        mediaPlayer.setDataSource(previewURLS[0]);
-                        mediaPlayer.prepareAsync();
-                        mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-                            @Override
-                            public void onPrepared(MediaPlayer mp) {
-                                // Start playback
-                                mediaPlayer.start();
-                            }
-                        });
-                    } catch (Exception e) {
-                        Toast.makeText(WrappedSongs.this, "Failed to load media", Toast.LENGTH_SHORT).show();
-                    }
+                    setTextAsync(names, artistTextView);
 
                 } catch (JSONException e) {
                     Log.d("JSON", "Failed to parse data: " + e);
-                    Toast.makeText(WrappedSongs.this, "Failed to parse data, watch Logcat for more details",
+                    Toast.makeText(WrappedArtists.this, "Failed to parse data, watch Logcat for more details",
                             Toast.LENGTH_SHORT).show();
                 }
             }
@@ -167,16 +162,6 @@ public class WrappedSongs extends AppCompatActivity {
 
     public void setTextAsync(final String text, TextView textView) {
         runOnUiThread(() -> textView.setText(text));
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        // Release the MediaPlayer when the activity is destroyed
-        if (mediaPlayer != null) {
-            mediaPlayer.release();
-            mediaPlayer = null;
-        }
     }
 
 }

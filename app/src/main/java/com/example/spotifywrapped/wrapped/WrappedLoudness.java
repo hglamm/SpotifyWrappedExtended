@@ -1,4 +1,4 @@
-package com.example.spotifywrapped;
+package com.example.spotifywrapped.wrapped;
 
 import android.content.Intent;
 import android.media.MediaPlayer;
@@ -9,26 +9,28 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.spotifywrapped.R;
+
 import java.text.DecimalFormat;
 
-public class WrappedDanceability extends AppCompatActivity {
-    private TextView danceTextView;
-    private double avgDanceability = 0.0;
-    private MediaPlayer mediaPlayer;
-    private String[] previewURLs;
+public class WrappedLoudness extends AppCompatActivity {
 
+    private TextView loudnessTextView;
+    double avgLoudness = 0.0;
+    private MediaPlayer mediaPlayer;
+    private String[] previewURLS;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.wrapped_danceability);
+        setContentView(R.layout.wrapped_loudness);
 
         Bundle bundle = getIntent().getExtras();
-        avgDanceability = bundle.getDouble("avgDanceability");
-        previewURLs = bundle.getStringArray("previewURLs");
+        avgLoudness = bundle.getDouble("avgLoudness");
+        previewURLS = bundle.getStringArray("previewURLs");
 
-        danceTextView = (TextView) findViewById(R.id.wrapped_danceability_text);
+        loudnessTextView = (TextView) findViewById(R.id.wrapped_loudness_text);
 
-        showWrappedDance();
+        showWrappedLoudness();
         CountDownTimer timer = new CountDownTimer(5000, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
@@ -37,17 +39,16 @@ public class WrappedDanceability extends AppCompatActivity {
 
             @Override
             public void onFinish() {
-                Intent intent = new Intent(WrappedDanceability.this, WrappedInstrumentalness.class);
+                Intent intent = new Intent(WrappedLoudness.this, WrappedDanceability.class);
                 intent.putExtras(bundle);
                 mediaPlayer.stop();
                 startActivity(intent);
             }
         };
         timer.start();
-
         mediaPlayer = new MediaPlayer();
         try {
-            mediaPlayer.setDataSource(previewURLs[0]);
+            mediaPlayer.setDataSource(previewURLS[4]);
             mediaPlayer.prepareAsync();
             mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
                 @Override
@@ -57,13 +58,16 @@ public class WrappedDanceability extends AppCompatActivity {
                 }
             });
         } catch (Exception e) {
-            Toast.makeText(WrappedDanceability.this, "Failed to load media", Toast.LENGTH_SHORT).show();
+            Toast.makeText(WrappedLoudness.this, "Failed to load media", Toast.LENGTH_SHORT).show();
         }
     }
 
-    private void showWrappedDance() {
-        DecimalFormat f = new DecimalFormat("##.00");
-        setTextAsync("DANCE FLOOR DELIGHTS \n\n Average Danceability: \n" + Math.round(avgDanceability*100) + " / 100", danceTextView);
+    private void showWrappedLoudness() {
+        DecimalFormat f = new DecimalFormat("##");
+        double opp = Math.abs(avgLoudness) / 60.0;
+        double format = 1.0 - opp;
+
+        setTextAsync("VOLUME UP! \n\n Average Loudness: " + f.format(format*100) + " / 100", loudnessTextView);
     }
 
     public void setTextAsync(final String text, TextView textView) {

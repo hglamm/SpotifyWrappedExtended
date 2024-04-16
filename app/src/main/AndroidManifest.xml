@@ -43,15 +43,17 @@
         <activity android:name=".MainActivity" />
         <activity android:name=".CreateAccountActivity" />
         <activity android:name=".SettingsActivity" />
-        <activity android:name=".WrappedSongs" />
-        <activity android:name=".WrappedArtists" />
-        <activity android:name=".WrappedAcousticness" />
-        <activity android:name=".WrappedEnergy" />
-        <activity android:name=".WrappedLoudness" />
-        <activity android:name=".WrappedDanceability" />
-        <activity android:name=".WrappedInstrumentalness" />
-        <activity android:name=".WrappedMode" />
-        <activity android:name=".WrappedSummary" />
+        <activity android:name=".wrapped.WrappedSongs" />
+        <activity android:name=".wrapped.WrappedArtists" />
+        <activity android:name=".wrapped.WrappedAcousticness" />
+        <activity android:name=".wrapped.WrappedEnergy" />
+        <activity android:name=".wrapped.WrappedLoudness" />
+        <activity android:name=".wrapped.WrappedDanceability" />
+        <activity android:name=".wrapped.WrappedInstrumentalness" />
+        <activity android:name=".wrapped.WrappedMode" />
+        <activity android:name=".wrapped.WrappedSummary" />
+        <activity android:name=".Recommendations" />
+
     </application>
 
 </manifest>

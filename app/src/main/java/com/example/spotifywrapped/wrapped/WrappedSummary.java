@@ -1,4 +1,4 @@
-package com.example.spotifywrapped;
+package com.example.spotifywrapped.wrapped;
 
 import android.content.Intent;
 import android.media.MediaPlayer;
@@ -8,27 +8,33 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-import java.text.DecimalFormat;
 
+import com.example.spotifywrapped.MainActivity;
+import com.example.spotifywrapped.R;
 
-public class WrappedEnergy extends AppCompatActivity {
-    private TextView energyTextView;
-    private double avgEnergy = 0.0;
+public class WrappedSummary extends AppCompatActivity {
+
+    private TextView summarySongsTextView, summaryArtistsTextView;
+    private String[] topSongs, topArtists;
     private MediaPlayer mediaPlayer;
     private String[] previewURLS;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.wrapped_energy);
+        setContentView(R.layout.wrapped_summary);
 
         Bundle bundle = getIntent().getExtras();
-        avgEnergy = bundle.getDouble("avgEnergy");
+
+        topSongs = bundle.getStringArray("topSongs");
+        topArtists = bundle.getStringArray("topArtists");
         previewURLS = bundle.getStringArray("previewURLs");
 
+        summaryArtistsTextView = (TextView) findViewById(R.id.wrapped_summary_artists);
+        summarySongsTextView = (TextView) findViewById(R.id.wrapped_summary_songs);
 
-        energyTextView = (TextView) findViewById(R.id.wrapped_energy_text);
-
-        showWrappedEnergy();
+        showWrappedMode();
         CountDownTimer timer = new CountDownTimer(5000, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
@@ -37,7 +43,7 @@ public class WrappedEnergy extends AppCompatActivity {
 
             @Override
             public void onFinish() {
-                Intent intent = new Intent(WrappedEnergy.this, WrappedLoudness.class);
+                Intent intent = new Intent(WrappedSummary.this, MainActivity.class);
                 intent.putExtras(bundle);
                 mediaPlayer.stop();
                 startActivity(intent);
@@ -56,15 +62,26 @@ public class WrappedEnergy extends AppCompatActivity {
                 }
             });
         } catch (Exception e) {
-            Toast.makeText(WrappedEnergy.this, "Failed to load media", Toast.LENGTH_SHORT).show();
+            Toast.makeText(WrappedSummary.this, "Failed to load media", Toast.LENGTH_SHORT).show();
         }
     }
 
-    private void showWrappedEnergy() {
-        DecimalFormat f = new DecimalFormat("##.00");
-        setTextAsync("ENERGY BOOSTER: \n\nAverage Energy: " + Math.round(avgEnergy*100) + " / 100", energyTextView);
+    private void showWrappedMode() {
+        String songs = "";
+        for (int i = 0; i < topSongs.length; i++) {
+            songs = songs.concat((i+1) + ". " + topSongs[i] + "\n");
+        }
+        String artists = "";
+        for (int i = 0; i < topArtists.length; i++) {
+            artists = artists.concat((i+1) + ". " + topArtists[i] + "\n");
+        }
+
+        setTextAsync("SPOTIFY WRAPPED: \n\nTOP SONGS: \n\n" + songs, summarySongsTextView);
+        setTextAsync("\nTOP ARTISTS: \n\n" + artists, summaryArtistsTextView);
     }
+
     public void setTextAsync(final String text, TextView textView) {
         runOnUiThread(() -> textView.setText(text));
     }
+
 }

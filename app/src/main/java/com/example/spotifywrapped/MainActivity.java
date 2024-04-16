@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.spotifywrapped.wrapped.WrappedSongs;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -140,6 +141,7 @@ public class MainActivity extends AppCompatActivity {
         Button settingBtn = (Button) findViewById(R.id.accSettings);
         Button wrappedBtn = (Button) findViewById(R.id.wrapped_btn);
         Button pastWrapped = (Button) findViewById(R.id.PastSummaries);
+        Button recommendationBtn = (Button) findViewById(R.id.recommendation_btn);
 
         if (mAccessToken != null) {
             loginBtn.setVisibility(View.INVISIBLE);
@@ -171,6 +173,19 @@ public class MainActivity extends AppCompatActivity {
                 });
 
 
+        });
+
+        recommendationBtn.setOnClickListener((v) -> {
+            if (mAccessToken == null) {
+                Toast.makeText(MainActivity.this, "You must login to Spotify first", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            Intent intent = new Intent(MainActivity.this, Recommendations.class);
+            Bundle bundle = new Bundle();
+            bundle.putString("token", mAccessToken);
+            intent.putExtras(bundle);
+            startActivity(intent);
         });
 
         loginBtn.setOnClickListener((v) -> {
