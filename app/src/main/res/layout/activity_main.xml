@@ -47,6 +47,13 @@
             android:layout_height="wrap_content"
             android:visibility="gone" />
 
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/recommendation_btn"
+            android:text="Get Song Recommendations"
+            android:layout_margin="8dp" />
+
 
         <Button
             android:id="@+id/PastSummaries"
