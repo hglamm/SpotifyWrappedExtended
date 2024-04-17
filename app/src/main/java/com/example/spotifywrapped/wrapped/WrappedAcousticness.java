@@ -48,6 +48,7 @@ public class WrappedAcousticness extends AppCompatActivity {
     private double avgMode = 0.0;
     private MediaPlayer mediaPlayer;
     private String[] previewURLS;
+    private String timeSpan;
 
 
     @Override
@@ -58,6 +59,7 @@ public class WrappedAcousticness extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
         mAccessToken = bundle.getString("token");
         previewURLS = bundle.getStringArray("previewURLs");
+        timeSpan = bundle.getString("timeSpan");
 
         analysisTextView = (TextView) findViewById(R.id.wrapped_analysis_text);
 
@@ -109,7 +111,7 @@ public class WrappedAcousticness extends AppCompatActivity {
 
     private void showWrappedAnalysis() {
         final Request request1 = new Request.Builder()
-                .url("https://api.spotify.com/v1/me/top/tracks?limit=50")
+                .url("https://api.spotify.com/v1/me/top/tracks?limit=50&time_range=" + timeSpan)
                 .addHeader("Authorization", "Bearer " + mAccessToken)
                 .build();
 
