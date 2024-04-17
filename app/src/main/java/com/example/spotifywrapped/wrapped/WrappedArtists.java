@@ -39,7 +39,7 @@ public class WrappedArtists extends AppCompatActivity {
     private String[] topArtistsFinal;
     private MediaPlayer mediaPlayer;
     private String[] previewURLS;
-
+    private String timeSpan;
 
 
     @Override
@@ -50,6 +50,7 @@ public class WrappedArtists extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
         mAccessToken = bundle.getString("token");
         previewURLS = bundle.getStringArray("previewURLs");
+        timeSpan = bundle.getString("timeSpan");
 
         artistTextView = (TextView) findViewById(R.id.wrapped_artists_text);
 
@@ -97,7 +98,7 @@ public class WrappedArtists extends AppCompatActivity {
 
     private void showWrappedArtists() {
         final Request request1 = new Request.Builder()
-                .url("https://api.spotify.com/v1/me/top/artists")
+                .url("https://api.spotify.com/v1/me/top/artists?time_range=" + timeSpan)
                 .addHeader("Authorization", "Bearer " + mAccessToken)
                 .build();
 

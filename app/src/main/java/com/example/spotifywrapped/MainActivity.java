@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -68,6 +69,8 @@ public class MainActivity extends AppCompatActivity {
     private double avgMode;
     private String id;
     private static String wrapName;
+
+    private String timeSpan = "medium_term";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -156,7 +159,31 @@ public class MainActivity extends AppCompatActivity {
                     return;
                 }
                 findViewById(R.id.fragmentContainerView).setVisibility(View.VISIBLE);
+
                 Button conf = (Button) findViewById(R.id.confyButt);
+                RadioButton shortTerm = (RadioButton) findViewById(R.id.short_term_radio);
+                RadioButton mediumTerm = (RadioButton) findViewById(R.id.medium_term_radio);
+                RadioButton longTerm = (RadioButton) findViewById(R.id.long_term_radio);
+                mediumTerm.setChecked(true);
+
+                shortTerm.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                    if (isChecked) {
+                        timeSpan = "short_term";
+                    }
+                });
+
+                mediumTerm.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                    if (isChecked) {
+                        timeSpan = "medium_term";
+                    }
+                });
+
+                longTerm.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                    if (isChecked) {
+                        timeSpan = "long_term";
+                    }
+                });
+
                 conf.setOnClickListener((vv) -> {
                         wrapName = ((EditText)(findViewById(R.id.confWrappedTxt))).getText().toString();
                         if (wrapName == null || wrapName.length() == 0) {
@@ -167,6 +194,7 @@ public class MainActivity extends AppCompatActivity {
                             Intent intent = new Intent(MainActivity.this, WrappedSongs.class);
                             Bundle bundle = new Bundle();
                             bundle.putString("token", mAccessToken);
+                            bundle.putString("timeSpan", timeSpan);
                             intent.putExtras(bundle);
                             startActivity(intent);
                         }

@@ -9,16 +9,64 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        android:minHeight="400dp"
+        android:rotationX="0">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:fontFamily="@font/circular"
+            android:gravity="center"
+            android:text="Timespan: "
+            app:layout_constraintBottom_toTopOf="@id/radio_group_time"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="1.0" />
+
+        <RadioGroup
+            android:id="@+id/radio_group_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="76dp"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:gravity="center"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <RadioButton
+                android:id="@+id/short_term_radio"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="last 4 weeks" />
+
+            <RadioButton
+                android:id="@+id/medium_term_radio"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:text="last 6 months" />
+
+            <RadioButton
+                android:id="@+id/long_term_radio"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="last year" />
+
+        </RadioGroup>
 
         <TextView
             android:id="@+id/textView2"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="68dp"
+            android:layout_marginTop="236dp"
             android:text="What Would You Like to Name This Wrapped?"
             android:textAlignment="center"
             app:layout_constraintEnd_toEndOf="parent"
+            android:gravity="center"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -26,6 +74,7 @@
             android:id="@+id/confyButt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="76dp"
             android:text="Confirm"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -35,15 +84,22 @@
             android:id="@+id/textInputLayout2"
             android:layout_width="409dp"
             android:layout_height="wrap_content"
+            android:layout_margin="8dp"
             android:layout_marginTop="10dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView2">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/confWrappedTxt"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
         </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/confWrappedTxt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="296dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>

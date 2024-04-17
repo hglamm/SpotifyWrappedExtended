@@ -41,6 +41,7 @@ public class WrappedSongs extends AppCompatActivity {
     private String[] topSongsFinal;
     private String[] previewURLS;
     private MediaPlayer mediaPlayer;
+    private String timeSpan;
 
 
     @Override
@@ -50,6 +51,7 @@ public class WrappedSongs extends AppCompatActivity {
 
         Bundle bundle = getIntent().getExtras();
         mAccessToken = bundle.getString("token");
+        timeSpan = bundle.getString("timeSpan");
 
         songTextView = (TextView) findViewById(R.id.wrapped_songs_text);
 
@@ -69,8 +71,6 @@ public class WrappedSongs extends AppCompatActivity {
             @Override
             public void onFinish() {
                 Intent intent = new Intent(WrappedSongs.this, WrappedArtists.class);
-                Bundle bundle = new Bundle();
-                bundle.putString("token", mAccessToken);
                 bundle.putStringArray("topSongs", topSongsFinal);
                 bundle.putStringArray("previewURLs", previewURLS);
                 intent.putExtras(bundle);
@@ -83,7 +83,7 @@ public class WrappedSongs extends AppCompatActivity {
 
     private void showWrappedSongs() {
         final Request request1 = new Request.Builder()
-                .url("https://api.spotify.com/v1/me/top/tracks?limit=5")
+                .url("https://api.spotify.com/v1/me/top/tracks?limit=5&time_range=" + timeSpan)
                 .addHeader("Authorization", "Bearer " + mAccessToken)
                 .build();
 
