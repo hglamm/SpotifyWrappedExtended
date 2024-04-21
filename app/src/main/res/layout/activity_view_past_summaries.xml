@@ -19,53 +19,56 @@
             android:id="@+id/backButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
+            android:layout_marginEnd="321dp"
+            android:layout_marginBottom="681dp"
             android:text="Back"
-            />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <Spinner
             android:id="@+id/sumSpinner"
             android:layout_width="407dp"
             android:layout_height="50dp"
+            android:layout_marginStart="16dp"
             android:contextClickable="true"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.265"
-            android:layout_marginStart="16dp"
-            />
+            app:layout_constraintVertical_bias="0.265" />
 
         <TextView
             android:id="@+id/sumBox"
             android:layout_width="400dp"
             android:layout_height="wrap_content"
-            android:textSize="14sp"
+            android:layout_marginStart="16dp"
             android:fontFamily="@font/circular"
+            android:gravity="left"
+            android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/sumConf"
-            app:layout_constraintVertical_bias="0.257"
-            android:layout_marginStart="16dp"
-            android:gravity="left"/>
+            app:layout_constraintVertical_bias="0.257" />
 
         <TextView
             android:id="@+id/textView4"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
             android:text="Which Wrapped Summary Would You Like to Display?"
+            android:textSize="20dp"
             app:layout_constraintBottom_toTopOf="@+id/sumSpinner"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.497"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:gravity="center_horizontal"
-            android:textSize="20dp"
             app:layout_constraintVertical_bias="0.541" />
 
         <Button
