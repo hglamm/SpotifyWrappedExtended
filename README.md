@@ -21,3 +21,6 @@ test: Adding missing tests
 chore: Changes to the build process or auxiliary tools and libraries such as documentation generation
 
 revert: reverting a change
+
+## Website for Demo:
+https://sites.google.com/view/cs2340-bproject2/home
