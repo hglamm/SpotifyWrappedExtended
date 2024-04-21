@@ -88,50 +88,53 @@ public class MainActivity extends AppCompatActivity {
 
         if (bundle1 != null) {
             mAccessToken = bundle1.getString("token");
-            datBa = FirebaseDatabase.getInstance();
-            dRef = datBa.getReference();
-            user = fireAu.getCurrentUser();
-            id = user.getUid();
-             Task<DataSnapshot> t = dRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<DataSnapshot> task) {
-                    dSnap = task.getResult();
-                    if (wrapName != null) {
-                        addDataToBase(wrapName);
-                        wrapName = null;
+            if (bundle1.getStringArray("topSongs") != null) {
+
+                datBa = FirebaseDatabase.getInstance();
+                dRef = datBa.getReference();
+                user = fireAu.getCurrentUser();
+                id = user.getUid();
+                Task<DataSnapshot> t = dRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DataSnapshot> task) {
+                        dSnap = task.getResult();
+                        if (wrapName != null) {
+                            addDataToBase(wrapName);
+                            wrapName = null;
+                        }
+
+                    }
+                });
+
+                dRef.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        dSnap = snapshot;
                     }
 
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+
+                String[] topSongsArr = bundle1.getStringArray("topSongs");
+                topSongs = "";
+                String[] topArtistsArr = bundle1.getStringArray("topArtists");
+                topArtists = "";
+                for (int i = 0; i < topArtistsArr.length; i++) {
+                    topSongs = String.format("%s%d. %s%n", topSongs, (i + 1), topSongsArr[i]);
                 }
-            });
-
-            dRef.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    dSnap = snapshot;
+                for (int i = 0; i < topArtistsArr.length; i++) {
+                    topArtists = String.format("%s%d. %s%n", topArtists, (i + 1), topArtistsArr[i]);
                 }
 
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-
-                }
-            });
-
-            String[] topSongsArr = bundle1.getStringArray("topSongs");
-            topSongs = "";
-            String[] topArtistsArr = bundle1.getStringArray("topArtists");
-            topArtists = "";
-            for (int i = 0; i < topArtistsArr.length; i++) {
-                topSongs = String.format("%s%d. %s%n", topSongs, (i + 1), topSongsArr[i]);
+                avgEnergy = secondDeci(bundle1.getDouble("avgEnergy"));
+                avgDanceability = secondDeci(bundle1.getDouble("avgDanceability"));
+                avgInstrumentalness = secondDeci(bundle1.getDouble("avgInstrumentalness"));
+                avgLoudness = secondDeci(bundle1.getDouble("avgLoudness"));
+                avgMode = secondDeci(bundle1.getDouble("avgMode"));
             }
-            for(int i = 0; i < topArtistsArr.length; i++) {
-                topArtists = String.format("%s%d. %s%n", topArtists, (i + 1), topArtistsArr[i]);
-            }
-
-            avgEnergy = secondDeci(bundle1.getDouble("avgEnergy"));
-            avgDanceability = secondDeci(bundle1.getDouble("avgDanceability"));
-            avgInstrumentalness = secondDeci(bundle1.getDouble("avgInstrumentalness"));
-            avgLoudness = secondDeci(bundle1.getDouble("avgLoudness"));
-            avgMode = secondDeci(bundle1.getDouble("avgMode"));
         }
 
         accEmail = getIntent().getStringExtra("val");
